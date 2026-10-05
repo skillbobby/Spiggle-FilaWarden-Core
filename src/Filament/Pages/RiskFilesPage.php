@@ -9,6 +9,8 @@ use Spiggle\FilaWarden\Services\RiskFileScannerService;
 
 class RiskFilesPage extends Page
 {
+    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Risk File Scanner';

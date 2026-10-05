@@ -14,10 +14,23 @@ class QueueMonitorService
      */
     public function getMetrics(): array
     {
-        $hasFailedTable = DB::getSchemaBuilder()->hasTable('failed_jobs');
-        $hasJobsTable = DB::getSchemaBuilder()->hasTable('jobs');
+        $hasFailedTable = cache()->remember('filawarden_has_failed_jobs', 300, fn () => DB::getSchemaBuilder()->hasTable('failed_jobs'));
+        $hasJobsTable = cache()->remember('filawarden_has_jobs', 300, fn () => DB::getSchemaBuilder()->hasTable('jobs'));
 
         $pendingCount = $hasJobsTable ? DB::table('jobs')->count() : 0;
+
+        // Fallback for Redis queue driver if database jobs table is not used
+        if ($pendingCount === 0 && config('queue.default') === 'redis') {
+            try {
+                if (class_exists(\Illuminate\Support\Facades\Redis::class)) {
+                    $redisQueue = config('queue.connections.redis.queue', 'default');
+                    $pendingCount = (int) \Illuminate\Support\Facades\Redis::connection()->llen("queues:{$redisQueue}");
+                }
+            } catch (\Throwable) {
+                // Ignore if redis server is unreachable
+            }
+        }
+
         $failedCount = $hasFailedTable ? DB::table('failed_jobs')->count() : 0;
 
         $failedJobs = $hasFailedTable

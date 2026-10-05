@@ -55,4 +55,21 @@ class SchedulerMonitorService
             'checked_at' => now()->toIso8601String(),
         ];
     }
+
+    /**
+     * Retrieve a summary status of scheduler health.
+     *
+     * @return array{is_running: bool, status_label: string, last_heartbeat: ?string, tasks_count: int}
+     */
+    public function getStatus(): array
+    {
+        $data = $this->getScheduledTasks();
+
+        return [
+            'is_running' => $data['is_healthy'],
+            'status_label' => $data['is_healthy'] ? 'Active' : 'Stalled',
+            'last_heartbeat' => $data['last_heartbeat'],
+            'tasks_count' => $data['tasks_count'],
+        ];
+    }
 }

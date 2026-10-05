@@ -9,6 +9,8 @@ use Spiggle\FilaWarden\Services\SslMonitorService;
 
 class SslMonitorPage extends Page
 {
+    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'SSL / TLS Certificate';

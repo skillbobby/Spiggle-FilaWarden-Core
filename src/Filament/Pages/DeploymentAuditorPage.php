@@ -10,6 +10,8 @@ use Spiggle\FilaWarden\Services\DeploymentAuditorEngine;
 
 class DeploymentAuditorPage extends Page
 {
+    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Deployment Auditor';

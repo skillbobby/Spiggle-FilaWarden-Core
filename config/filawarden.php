@@ -15,6 +15,18 @@ return [
         'icon' => 'heroicon-o-shield-check',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Page & Action Authorization
+    |--------------------------------------------------------------------------
+    | Configure who can access FilaWarden diagnostic pages in production.
+    */
+    'authorization' => [
+        'enforce_in_production' => env('FILAWARDEN_ENFORCE_AUTH', true),
+        'permission' => env('FILAWARDEN_PERMISSION', 'access_filawarden'),
+        'callback' => null, // fn ($user) => $user->is_super_admin
+    ],
+
     'thresholds' => [
         'cpu' => [
             'warning' => 70, // %
@@ -38,6 +50,10 @@ return [
         'telemetry_ttl' => 10, // seconds
         'audit_ttl' => 60, // seconds
     ],
+
+    'max_scanned_files' => env('FILAWARDEN_MAX_SCANNED_FILES', 500),
+
+    'log_path' => env('FILAWARDEN_LOG_PATH', null),
 
     'pro_upgrade_url' => 'https://spiggle.dev/filawarden-pro',
 ];

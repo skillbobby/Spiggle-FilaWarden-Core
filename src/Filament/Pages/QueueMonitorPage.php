@@ -9,6 +9,8 @@ use Spiggle\FilaWarden\Services\QueueMonitorService;
 
 class QueueMonitorPage extends Page
 {
+    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Queue Monitor';

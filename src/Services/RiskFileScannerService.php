@@ -19,6 +19,9 @@ class RiskFileScannerService
             storage_path('app'),
         ];
 
+        $maxFiles = (int) config('filawarden.max_scanned_files', 500);
+        $scannedCount = 0;
+
         foreach ($scanPaths as $path) {
             if (! is_dir($path)) {
                 continue;
@@ -26,9 +29,13 @@ class RiskFileScannerService
 
             try {
                 $finder = new Finder();
-                $finder->files()->in($path)->depth('< 3')->ignoreDotFiles(false);
+                $finder->files()->in($path)->depth('< 3')->ignoreDotFiles(false)->exclude(['public']);
 
                 foreach ($finder as $file) {
+                    if (++$scannedCount > $maxFiles) {
+                        break 2;
+                    }
+
                     $fileName = $file->getFilename();
                     $ext = strtolower($file->getExtension());
                     $relPath = str_replace(base_path() . '/', '', $file->getRealPath());

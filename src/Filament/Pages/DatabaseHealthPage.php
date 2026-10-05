@@ -9,6 +9,8 @@ use Spiggle\FilaWarden\Services\DatabaseHealthService;
 
 class DatabaseHealthPage extends Page
 {
+    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Database Health';

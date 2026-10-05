@@ -52,36 +52,82 @@ class DatabaseHealthService
                     ];
                 }
 
-                // Global connection stats
-                $statusRows = DB::select("SHOW GLOBAL STATUS WHERE Variable_name IN ('Threads_connected', 'Innodb_buffer_pool_read_requests', 'Innodb_buffer_pool_reads')");
-                $statusMap = [];
-                foreach ($statusRows as $status) {
-                    $statusMap[$status->Variable_name] = (int) $status->Value;
+                // Global connection stats (wrapped with permission fallback for cloud RDS / PlanetScale)
+                try {
+                    $statusRows = DB::select("SHOW GLOBAL STATUS WHERE Variable_name IN ('Threads_connected', 'Innodb_buffer_pool_read_requests', 'Innodb_buffer_pool_reads')");
+                    $statusMap = [];
+                    foreach ($statusRows as $status) {
+                        $statusMap[$status->Variable_name] = (int) $status->Value;
+                    }
+
+                    $activeConnections = $statusMap['Threads_connected'] ?? 1;
+
+                    $readReq = $statusMap['Innodb_buffer_pool_read_requests'] ?? 1;
+                    $reads = $statusMap['Innodb_buffer_pool_reads'] ?? 0;
+                    if ($readReq > 0) {
+                        $bufferHitRate = round((1 - ($reads / $readReq)) * 100, 2);
+                    }
+                } catch (\Throwable) {
+                    // Non-privileged users fall back gracefully
+                }
+            } elseif ($connection === 'pgsql') {
+                // PostgreSQL table size metrics
+                $tableRows = DB::select("
+                    SELECT 
+                        relname AS table,
+                        n_live_tup AS rows,
+                        ROUND((pg_relation_size(relid) / 1024.0 / 1024.0)::numeric, 2) AS data_mb,
+                        ROUND((pg_indexes_size(relid) / 1024.0 / 1024.0)::numeric, 2) AS index_mb,
+                        ROUND((pg_total_relation_size(relid) / 1024.0 / 1024.0)::numeric, 2) AS total_mb
+                    FROM pg_stat_user_tables
+                    ORDER BY pg_total_relation_size(relid) DESC
+                    LIMIT 20
+                ");
+
+                foreach ($tableRows as $row) {
+                    $totalSizeMb += (float) $row->total_mb;
+                    $tables[] = [
+                        'name' => $row->table,
+                        'rows' => (int) $row->rows,
+                        'data_mb' => (float) $row->data_mb,
+                        'index_mb' => (float) $row->index_mb,
+                        'total_mb' => (float) $row->total_mb,
+                    ];
                 }
 
-                $activeConnections = $statusMap['Threads_connected'] ?? 1;
+                // PostgreSQL connection count and cache hit rate
+                try {
+                    $connRows = DB::select("SELECT count(*) AS active FROM pg_stat_activity WHERE state = 'active'");
+                    $activeConnections = (int) ($connRows[0]->active ?? 1);
 
-                $readReq = $statusMap['Innodb_buffer_pool_read_requests'] ?? 1;
-                $reads = $statusMap['Innodb_buffer_pool_reads'] ?? 0;
-                if ($readReq > 0) {
-                    $bufferHitRate = round((1 - ($reads / $readReq)) * 100, 2);
+                    $cacheRows = DB::select("SELECT ROUND((sum(heap_blks_hit) * 100.0 / nullif(sum(heap_blks_hit) + sum(heap_blks_read), 0))::numeric, 2) AS hit_rate FROM pg_statio_user_tables");
+                    $bufferHitRate = (float) ($cacheRows[0]->hit_rate ?? 99.5);
+                } catch (\Throwable) {
+                    // Ignore if restricted
                 }
             } elseif ($connection === 'sqlite') {
+                $actualFile = is_string($dbName) && file_exists($dbName) ? $dbName : database_path('database.sqlite');
+                if (file_exists($actualFile)) {
+                    $totalSizeMb = round(filesize($actualFile) / 1024 / 1024, 2);
+                }
+
                 $tableRows = DB::select("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+                $tableCount = count($tableRows);
+                $perTableMb = $tableCount > 0 ? round($totalSizeMb / $tableCount, 3) : 0.01;
+
                 foreach ($tableRows as $row) {
                     $count = (int) DB::table($row->name)->count();
                     $tables[] = [
                         'name' => $row->name,
                         'rows' => $count,
-                        'data_mb' => 0.05,
-                        'index_mb' => 0.01,
-                        'total_mb' => 0.06,
+                        'data_mb' => round($perTableMb * 0.8, 2),
+                        'index_mb' => round($perTableMb * 0.2, 2),
+                        'total_mb' => round($perTableMb, 2),
                     ];
-                    $totalSizeMb += 0.06;
                 }
             }
         } catch (\Throwable $e) {
-            // Graceful fallback for non-mysql connections or testing
+            // Graceful fallback for non-supported connections or testing
         }
 
         return [

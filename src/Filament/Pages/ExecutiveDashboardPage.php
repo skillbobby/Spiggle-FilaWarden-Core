@@ -12,6 +12,8 @@ use Spiggle\FilaWarden\Filament\Widgets\SystemResourcesGaugeWidget;
 
 class ExecutiveDashboardPage extends Page
 {
+    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+
     protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Executive Dashboard';
