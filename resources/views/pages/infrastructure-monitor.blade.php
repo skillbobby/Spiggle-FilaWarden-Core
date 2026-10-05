@@ -1,7 +1,7 @@
 <x-filament-panels::page>
     @include('filawarden::partials.theme-styles')
 
-    <div class="space-y-6 max-w-full overflow-x-hidden" wire:poll.5s="refreshTelemetry">
+    <div class="space-y-6 max-w-full overflow-x-hidden" wire:poll.15s="refreshTelemetry">
         @php
             $sampledAt = \Carbon\Carbon::parse($telemetry['collected_at'] ?? now());
             $cpuPct = $telemetry['cpu']['percentage'] ?? 0;

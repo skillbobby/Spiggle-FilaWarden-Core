@@ -14,10 +14,26 @@ class HealthScoreEngine
      *
      * @return array<string, mixed>
      */
-    public function compute(): array
+    public function compute(bool $force = false): array
     {
-        $deploymentAudit = $this->deploymentAuditor->audit();
-        $resources = $this->resourceCollector->getMetrics();
+        if ($force) {
+            \Illuminate\Support\Facades\Cache::forget('filawarden_health_score');
+        }
+
+        $ttl = (int) config('filawarden.cache.telemetry_ttl', 10);
+
+        return \Illuminate\Support\Facades\Cache::remember('filawarden_health_score', $ttl, function () use ($force) {
+            return $this->computeFresh($force);
+        });
+    }
+
+    /**
+     * Fresh computation of health vectors.
+     */
+    public function computeFresh(bool $force = false): array
+    {
+        $deploymentAudit = $this->deploymentAuditor->audit($force);
+        $resources = $this->resourceCollector->getMetrics($force);
 
         // 1. Deployment Score (0-100)
         $deploymentScore = $deploymentAudit['score'];

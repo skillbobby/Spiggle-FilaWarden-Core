@@ -1,7 +1,7 @@
 <x-filament-panels::page>
     @include('filawarden::partials.theme-styles')
 
-    <div class="space-y-6 max-w-full overflow-x-hidden" wire:poll.10s="refreshLogs">
+    <div class="space-y-6 max-w-full overflow-x-hidden" wire:poll.30s="refreshLogs">
         @php
             $exists = $logData['exists'] ?? false;
             $sizeMb = $logData['size_mb'] ?? 0;

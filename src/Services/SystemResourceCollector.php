@@ -11,7 +11,25 @@ class SystemResourceCollector
      *
      * @return array<string, mixed>
      */
-    public function getMetrics(): array
+    public function getMetrics(bool $force = false): array
+    {
+        if ($force) {
+            Cache::forget('filawarden_system_resources');
+        }
+
+        $ttl = (int) config('filawarden.cache.telemetry_ttl', 10);
+
+        return Cache::remember('filawarden_system_resources', $ttl, function () {
+            return $this->collectMetrics();
+        });
+    }
+
+    /**
+     * Collect fresh system telemetry metrics.
+     *
+     * @return array<string, mixed>
+     */
+    public function collectMetrics(): array
     {
         return [
             'cpu' => $this->getCpuUsage(),

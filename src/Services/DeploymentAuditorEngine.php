@@ -12,7 +12,25 @@ class DeploymentAuditorEngine
      *
      * @return array<string, mixed>
      */
-    public function audit(): array
+    public function audit(bool $force = false): array
+    {
+        if ($force) {
+            \Illuminate\Support\Facades\Cache::forget('filawarden_deployment_audit');
+        }
+
+        $ttl = (int) config('filawarden.cache.audit_ttl', 60);
+
+        return \Illuminate\Support\Facades\Cache::remember('filawarden_deployment_audit', $ttl, function () {
+            return $this->runAuditChecks();
+        });
+    }
+
+    /**
+     * Execute all 12 validation checks.
+     *
+     * @return array<string, mixed>
+     */
+    public function runAuditChecks(): array
     {
         $checks = [
             $this->checkAppDebug(),

@@ -67,7 +67,7 @@ class DeploymentAuditorPage extends Page
     {
         /** @var DeploymentAuditorEngine $auditor */
         $auditor = app(DeploymentAuditorEngine::class);
-        $this->auditData = $auditor->audit();
+        $this->auditData = $auditor->audit(force: true);
 
         Notification::make()
             ->title('Deployment Audit Completed')

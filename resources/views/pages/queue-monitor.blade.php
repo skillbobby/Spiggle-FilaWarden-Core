@@ -1,7 +1,7 @@
 <x-filament-panels::page>
     @include('filawarden::partials.theme-styles')
 
-    <div class="space-y-6 max-w-full overflow-x-hidden" wire:poll.10s="refreshMetrics">
+    <div class="space-y-6 max-w-full overflow-x-hidden" wire:poll.20s="refreshMetrics">
         @php
             $failedCount = $metrics['failed_count'] ?? 0;
             $pendingCount = $metrics['pending_count'] ?? 0;
