@@ -235,7 +235,7 @@
                         <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
                             Exception Stack Trace
                         </h4>
-                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-80 whitespace-pre-wrap border border-slate-800">
+                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-80 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
                             {{ $inspectedJob['exception'] }}
                         </div>
                     </div>
@@ -245,7 +245,7 @@
                         <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
                             Job Payload
                         </h4>
-                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 whitespace-pre-wrap border border-slate-800">
+                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #cbd5e1 !important; border-color: #1e293b !important;">
                             @php
                                 $payloadRaw = $inspectedJob['payload'] ?? '';
                                 if (is_array($payloadRaw)) {

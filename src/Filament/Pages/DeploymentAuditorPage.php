@@ -28,6 +28,10 @@ class DeploymentAuditorPage extends Page
     public function mount(DeploymentAuditorEngine $auditor): void
     {
         $this->auditData = $auditor->audit();
+
+        if (request()->has('inspect')) {
+            $this->inspectCheck(request()->query('inspect'));
+        }
     }
 
     public function inspectCheck(string $id): void

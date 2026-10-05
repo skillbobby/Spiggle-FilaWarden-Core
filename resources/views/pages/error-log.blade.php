@@ -116,7 +116,7 @@
                                 @endif
                             </div>
 
-                            <div class="rounded-lg bg-slate-950 p-2.5 font-mono text-xs text-rose-300 border border-slate-800 break-all leading-relaxed overflow-hidden">
+                            <div class="rounded-lg bg-slate-950 p-2.5 font-mono text-xs text-rose-300 border border-slate-800 break-all leading-relaxed overflow-hidden" style="background-color: #020617 !important; color: #fda4af !important; border-color: #1e293b !important;">
                                 {{ $entry['message'] }}
                             </div>
 
@@ -231,7 +231,7 @@
                         <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
                             Log Entry Body
                         </h4>
-                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-96 whitespace-pre-wrap border border-slate-800">
+                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-96 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
                             {{ $inspectedEntry['full'] ?? $inspectedEntry['message'] ?? 'No trace details recorded.' }}
                         </div>
                     </div>

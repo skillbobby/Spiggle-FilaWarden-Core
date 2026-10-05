@@ -242,12 +242,16 @@
 
                     <!-- Remediation Runbook -->
                     <div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 shadow-sm">
-                        <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 mb-2 flex items-center gap-1.5">
-                            <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
-                            Remediation Command / Action
-                        </h5>
-                        <div class="rounded-lg bg-slate-950 p-3.5 text-emerald-300 font-mono text-xs select-all whitespace-pre-wrap border border-slate-800">
-                            {{ $inspectedCheck['remediation'] }}
+                        <div class="flex items-center justify-between mb-2">
+                            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 flex items-center gap-1.5">
+                                <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
+                                Remediation Command / Action
+                            </h5>
+                            <span class="text-[10px] font-mono text-slate-400 dark:text-gray-500 uppercase">CLI Runbook</span>
+                        </div>
+                        <div class="rounded-lg bg-slate-950 p-3.5 border border-slate-800 font-mono text-xs select-all whitespace-pre-wrap leading-relaxed flex items-start gap-2.5 shadow-inner" style="background-color: #020617 !important; border-color: #1e293b !important;">
+                            <span class="text-emerald-500 select-none font-bold shrink-0" style="color: #10b981 !important;">$</span>
+                            <span class="text-emerald-300 font-semibold break-all" style="color: #6ee7b7 !important;">{{ $inspectedCheck['remediation'] }}</span>
                         </div>
                     </div>
                 </div>
