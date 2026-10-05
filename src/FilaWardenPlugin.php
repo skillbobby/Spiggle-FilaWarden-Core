@@ -88,7 +88,11 @@ class FilaWardenPlugin implements Plugin
 
         $panel
             ->pages($pages)
-            ->widgets($widgets);
+            ->widgets($widgets)
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => view('filawarden::partials.theme-styles')
+            );
     }
 
     public function boot(Panel $panel): void
