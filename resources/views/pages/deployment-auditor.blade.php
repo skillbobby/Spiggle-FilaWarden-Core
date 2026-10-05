@@ -1,148 +1,194 @@
 <x-filament-panels::page>
-    <div class="space-y-6">
-        <!-- Readiness Summary Section -->
-        <x-filament::section
-            icon="heroicon-o-clipboard-document-check"
-            :icon-color="$auditData['score'] >= 90 ? 'success' : ($auditData['score'] >= 70 ? 'warning' : 'danger')"
-        >
-            <x-slot name="heading">
-                Deployment Readiness: {{ $auditData['rating'] }} ({{ $auditData['score'] }} / 100)
-            </x-slot>
+    @include('filawarden::partials.theme-styles')
 
-            <x-slot name="description">
-                Evaluated against Laravel production readiness standards. Last assessed: {{ \Carbon\Carbon::parse($auditData['audited_at'])->format('M j, Y H:i:s') }} ({{ \Carbon\Carbon::parse($auditData['audited_at'])->diffForHumans() }}). Click Inspect on any check to view remediation runbooks in the side panel.
-            </x-slot>
+    <div class="space-y-6 max-w-full overflow-x-hidden">
+        @php
+            $score = $auditData['score'] ?? 0;
+            $rating = $auditData['rating'] ?? 'Evaluating';
+            $statusColor = match(true) {
+                $score >= 90 => 'emerald',
+                $score >= 70 => 'amber',
+                default => 'red',
+            };
+            $auditedAt = \Carbon\Carbon::parse($auditData['audited_at'] ?? now());
+        @endphp
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center mt-2">
-                <div class="rounded-lg bg-gray-50 p-3 dark:bg-white/5 cursor-help" x-tooltip="'{{ $auditData['passed'] }} environment criteria verified against production baseline'">
-                    <span class="block text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ $auditData['passed'] }}</span>
-                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Passed</span>
-                </div>
-                <div class="rounded-lg bg-gray-50 p-3 dark:bg-white/5 cursor-help" x-tooltip="'{{ $auditData['warnings'] }} potential optimizations or non-critical deviations'">
-                    <span class="block text-2xl font-bold text-amber-600 dark:text-amber-400">{{ $auditData['warnings'] }}</span>
-                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Warnings</span>
-                </div>
-                <div class="rounded-lg bg-gray-50 p-3 dark:bg-white/5 cursor-help" x-tooltip="'{{ $auditData['failed'] }} failed production prerequisites requiring action'">
-                    <span class="block text-2xl font-bold text-rose-600 dark:text-rose-400">{{ $auditData['failed'] }}</span>
-                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Failed</span>
-                </div>
+        <!-- Readiness Status Banner -->
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-sm p-4 sm:p-5 flex items-start gap-4">
+            <div class="p-2.5 rounded-lg shrink-0 mt-0.5 {{ $statusColor === 'emerald' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : ($statusColor === 'amber' ? 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400') }}">
+                <x-heroicon-s-clipboard-document-check class="w-6 h-6" />
             </div>
-        </x-filament::section>
+            <div class="min-w-0 flex-1">
+                <h2 class="text-base font-semibold text-slate-900 dark:text-white">
+                    Deployment Readiness: {{ $rating }} ({{ $score }} / 100)
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-gray-400 mt-1">
+                    Evaluated against Laravel production readiness standards. Last assessed: {{ $auditedAt->format('M j, Y H:i:s') }} ({{ $auditedAt->diffForHumans() }}). Click Inspect on any check to view remediation runbooks in the side panel.
+                </p>
+            </div>
+        </div>
 
-        <!-- Checks Table Section -->
-        <x-filament::section>
-            <x-slot name="heading">
-                Production Validation Checks ({{ $auditData['total'] }})
-            </x-slot>
+        <!-- Summary Bar -->
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-sm p-4 sm:p-5 flex flex-wrap items-center gap-6 sm:gap-8">
+            <div class="flex items-center gap-2">
+                <span class="text-emerald-500 font-semibold text-lg">{{ $auditData['passed'] ?? 0 }}</span>
+                <span class="text-slate-600 dark:text-gray-300 text-sm font-medium">Passed</span>
+            </div>
+            <div class="w-px h-8 bg-slate-200 dark:bg-gray-800 hidden md:block"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-amber-500 font-semibold text-lg">{{ $auditData['warnings'] ?? 0 }}</span>
+                <span class="text-slate-600 dark:text-gray-300 text-sm font-medium">Warnings</span>
+            </div>
+            <div class="w-px h-8 bg-slate-200 dark:bg-gray-800 hidden md:block"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-red-500 font-semibold text-lg">{{ $auditData['failed'] ?? 0 }}</span>
+                <span class="text-slate-600 dark:text-gray-300 text-sm font-medium">Failed</span>
+            </div>
+        </div>
 
-            <!-- Mobile Card List View (md:hidden) -->
+        <!-- Production Validation Checks Section -->
+        <div>
+            <div class="flex items-center gap-2 mb-4 mt-6">
+                <h2 class="text-lg font-bold text-slate-800 dark:text-white">Production Validation Checks</h2>
+                <span class="bg-slate-200 dark:bg-gray-800 text-slate-700 dark:text-gray-300 py-0.5 px-2.5 rounded-full text-xs font-bold">{{ $auditData['total'] ?? count($auditData['checks'] ?? []) }}</span>
+            </div>
+
+            <!-- Mobile Stacked Card View (md:hidden) -->
             <div class="space-y-3 md:hidden">
-                @foreach($auditData['checks'] as $check)
-                    <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-gray-900/60 space-y-3">
-                        <div class="flex items-start justify-between gap-2">
-                            <h4 class="font-bold text-sm text-gray-900 dark:text-white leading-snug">
-                                {{ $check['name'] }}
-                            </h4>
-                            <div class="shrink-0">
-                                @if($check['status'] === 'passed')
-                                    <x-filament::badge color="success" icon="heroicon-m-check">
-                                        Passed
-                                    </x-filament::badge>
-                                @elseif($check['status'] === 'warning')
-                                    <x-filament::badge color="warning" icon="heroicon-m-exclamation-triangle">
-                                        Warning
-                                    </x-filament::badge>
-                                @else
-                                    <x-filament::badge color="danger" icon="heroicon-m-x-mark">
-                                        Failed
-                                    </x-filament::badge>
-                                @endif
-                            </div>
+                @foreach($auditData['checks'] ?? [] as $check)
+                    <div class="bg-white dark:bg-gray-900 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm p-4 space-y-3">
+                        <div class="flex justify-between items-start gap-2">
+                            <h3 class="font-semibold text-slate-900 dark:text-white text-sm">{{ $check['name'] }}</h3>
+                            @if($check['status'] === 'passed')
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 shrink-0">
+                                    <x-heroicon-m-check class="w-3.5 h-3.5" /> Passed
+                                </span>
+                            @elseif($check['status'] === 'warning')
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 shrink-0">
+                                    <x-heroicon-m-exclamation-triangle class="w-3.5 h-3.5" /> Warning
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20 shrink-0">
+                                    <x-heroicon-m-x-mark class="w-3.5 h-3.5" /> Failed
+                                </span>
+                            @endif
                         </div>
 
-                        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
-                            <x-filament::badge color="gray" size="sm">
-                                {{ $check['category'] }}
-                            </x-filament::badge>
-                            <span class="font-mono text-xs text-gray-600 dark:text-gray-300">
-                                Current: <strong>{{ $check['current'] }}</strong>
-                            </span>
+                        <div class="flex items-center gap-2 flex-wrap text-xs">
+                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 text-[11px] font-medium rounded">{{ $check['category'] }}</span>
+                            <span class="text-slate-500 dark:text-gray-400">Current: <strong class="text-slate-900 dark:text-white font-medium break-all">{{ $check['current'] }}</strong></span>
                         </div>
 
-                        <div class="pt-2 border-t border-gray-100 dark:border-white/5 flex justify-end">
-                            <x-filament::button
+                        <div class="pt-2 border-t border-slate-100 dark:border-white/5">
+                            <button
                                 wire:click="inspectCheck('{{ $check['id'] }}')"
-                                size="sm"
-                                color="primary"
-                                icon="heroicon-m-eye"
-                                class="w-full sm:w-auto"
-                                tooltip="Inspect diagnostic details and remediation runbook"
+                                type="button"
+                                class="w-full inline-flex justify-center items-center gap-1.5 px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
                             >
-                                Inspect Runbook
-                            </x-filament::button>
+                                <x-heroicon-m-eye class="w-4 h-4" /> Inspect Runbook
+                            </button>
                         </div>
                     </div>
                 @endforeach
             </div>
 
-            <!-- Desktop Table View (hidden md:block) -->
-            <div class="hidden md:block overflow-x-auto">
-                <table class="w-full min-w-[700px] text-left text-sm divide-y divide-gray-200 dark:divide-white/10">
-                    <thead class="text-xs uppercase text-gray-500 dark:text-gray-400">
+            <!-- Desktop 3-Column Card Grid (hidden md:grid) -->
+            <div class="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($auditData['checks'] ?? [] as $check)
+                    <div class="bg-white dark:bg-gray-900 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm p-5 flex flex-col hover:border-slate-300 dark:hover:border-white/20 transition-colors">
+                        <div class="flex justify-between items-start gap-2 mb-3">
+                            <h3 class="font-semibold text-slate-900 dark:text-white text-sm">{{ $check['name'] }}</h3>
+                            @if($check['status'] === 'passed')
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 shrink-0">
+                                    <x-heroicon-m-check class="w-3.5 h-3.5" /> Passed
+                                </span>
+                            @elseif($check['status'] === 'warning')
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 shrink-0">
+                                    <x-heroicon-m-exclamation-triangle class="w-3.5 h-3.5" /> Warning
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20 shrink-0">
+                                    <x-heroicon-m-x-mark class="w-3.5 h-3.5" /> Failed
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="flex items-center gap-2 mb-3 flex-wrap text-xs">
+                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 text-[11px] font-medium rounded">{{ $check['category'] }}</span>
+                            <span class="text-slate-500 dark:text-gray-400">Current: <strong class="text-slate-900 dark:text-white font-medium break-all">{{ $check['current'] }}</strong></span>
+                        </div>
+
+                        <div class="mt-auto pt-2">
+                            <button
+                                wire:click="inspectCheck('{{ $check['id'] }}')"
+                                type="button"
+                                class="w-full inline-flex justify-center items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
+                            >
+                                <x-heroicon-m-eye class="w-4 h-4" /> Inspect Runbook
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Data Table View (hidden md:block) -->
+        <div class="hidden md:block mt-8 bg-white dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-sm overflow-hidden mb-8">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="bg-slate-50 dark:bg-gray-800/60 border-b border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 font-semibold text-xs uppercase tracking-wider">
                         <tr>
-                            <th class="py-3 px-4">Validation Check</th>
-                            <th class="py-3 px-4">Category</th>
-                            <th class="py-3 px-4">Status</th>
-                            <th class="py-3 px-4">Current State</th>
-                            <th class="py-3 px-4 text-right">Runbook</th>
+                            <th scope="col" class="px-6 py-4">Validation Check</th>
+                            <th scope="col" class="px-6 py-4">Category</th>
+                            <th scope="col" class="px-6 py-4">Status</th>
+                            <th scope="col" class="px-6 py-4">Current State</th>
+                            <th scope="col" class="px-6 py-4 text-right">Runbook</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-white/5 font-normal">
-                        @foreach($auditData['checks'] as $check)
-                            <tr class="hover:bg-gray-50/50 dark:hover:bg-white/5 transition">
-                                <td class="py-3.5 px-4 font-semibold text-gray-900 dark:text-white">
+                    <tbody class="divide-y divide-slate-100 dark:divide-white/5 text-slate-700 dark:text-gray-300">
+                        @foreach($auditData['checks'] ?? [] as $check)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-gray-800/40 transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-slate-900 dark:text-white">
                                     {{ $check['name'] }}
                                 </td>
-                                <td class="py-3.5 px-4">
-                                    <x-filament::badge color="gray" size="sm">
+                                <td class="px-6 py-3.5">
+                                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 text-[11px] font-medium rounded">
                                         {{ $check['category'] }}
-                                    </x-filament::badge>
+                                    </span>
                                 </td>
-                                <td class="py-3.5 px-4">
+                                <td class="px-6 py-3.5">
                                     @if($check['status'] === 'passed')
-                                        <x-filament::badge color="success" icon="heroicon-m-check" tooltip="Meets production readiness benchmark">
-                                            Passed
-                                        </x-filament::badge>
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                                            <x-heroicon-m-check class="w-3.5 h-3.5" /> Passed
+                                        </span>
                                     @elseif($check['status'] === 'warning')
-                                        <x-filament::badge color="warning" icon="heroicon-m-exclamation-triangle" tooltip="Sub-optimal state. Optimization recommended for production.">
-                                            Warning
-                                        </x-filament::badge>
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
+                                            <x-heroicon-m-exclamation-triangle class="w-3.5 h-3.5" /> Warning
+                                        </span>
                                     @else
-                                        <x-filament::badge color="danger" icon="heroicon-m-x-mark" tooltip="Production risk! Violates security or reliability standard.">
-                                            Failed
-                                        </x-filament::badge>
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20">
+                                            <x-heroicon-m-x-mark class="w-3.5 h-3.5" /> Failed
+                                        </span>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4 font-mono text-xs text-gray-700 dark:text-gray-300">
+                                <td class="px-6 py-3.5 font-mono text-xs text-slate-600 dark:text-gray-300">
                                     {{ $check['current'] }}
                                 </td>
-                                <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                                    <x-filament::button
+                                <td class="px-6 py-3.5 text-right">
+                                    <button
                                         wire:click="inspectCheck('{{ $check['id'] }}')"
-                                        size="xs"
-                                        color="primary"
-                                        icon="heroicon-m-eye"
-                                        tooltip="Inspect diagnostic details and remediation runbook"
+                                        type="button"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
                                     >
-                                        Inspect
-                                    </x-filament::button>
+                                        <x-heroicon-m-eye class="w-3.5 h-3.5" /> Inspect
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-        </x-filament::section>
+        </div>
 
         <!-- Slide-Over Side Panel for Check Details -->
         <x-filament::modal id="inspect-check-modal" slide-over width="2xl">
@@ -157,37 +203,37 @@
             @if($inspectedCheck)
                 <div class="space-y-6 text-sm">
                     <!-- Check Header -->
-                    <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5 space-y-2">
+                    <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-bold text-gray-500 tracking-wider">
+                            <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider">
                                 Category: {{ $inspectedCheck['category'] }}
                             </span>
                             @if($inspectedCheck['status'] === 'passed')
-                                <x-filament::badge color="success">PASSED</x-filament::badge>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">PASSED</span>
                             @elseif($inspectedCheck['status'] === 'warning')
-                                <x-filament::badge color="warning">WARNING</x-filament::badge>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">WARNING</span>
                             @else
-                                <x-filament::badge color="danger">FAILED</x-filament::badge>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20">FAILED</span>
                             @endif
                         </div>
-                        <h3 class="text-base font-bold text-gray-900 dark:text-white">
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">
                             {{ $inspectedCheck['name'] }}
                         </h3>
-                        <p class="text-xs text-gray-600 dark:text-gray-300">
+                        <p class="text-xs text-slate-600 dark:text-gray-300">
                             {{ $inspectedCheck['message'] }}
                         </p>
                     </div>
 
                     <!-- State vs Recommended -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="rounded-lg bg-gray-50 p-3 dark:bg-white/5">
-                            <span class="block text-xs uppercase font-semibold text-gray-500 mb-1">Current State</span>
-                            <span class="font-mono text-xs font-bold text-gray-800 dark:text-gray-200">
+                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
+                            <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Current State</span>
+                            <span class="font-mono text-xs font-bold text-slate-900 dark:text-white">
                                 {{ $inspectedCheck['current'] }}
                             </span>
                         </div>
-                        <div class="rounded-lg bg-gray-50 p-3 dark:bg-white/5">
-                            <span class="block text-xs uppercase font-semibold text-gray-500 mb-1">Recommended Benchmark</span>
+                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
+                            <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Recommended Benchmark</span>
                             <span class="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
                                 {{ $inspectedCheck['recommended'] }}
                             </span>
@@ -195,12 +241,12 @@
                     </div>
 
                     <!-- Remediation Runbook -->
-                    <div class="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4 dark:border-emerald-500/30">
-                        <h5 class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1.5 flex items-center gap-1.5">
-                            <x-filament::icon icon="heroicon-m-wrench" class="w-4 h-4" />
+                    <div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 shadow-sm">
+                        <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 mb-2 flex items-center gap-1.5">
+                            <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
                             Remediation Command / Action
                         </h5>
-                        <div class="rounded bg-gray-950 p-3 text-emerald-300 font-mono text-xs select-all whitespace-pre-wrap">
+                        <div class="rounded-lg bg-slate-950 p-3.5 text-emerald-300 font-mono text-xs select-all whitespace-pre-wrap border border-slate-800">
                             {{ $inspectedCheck['remediation'] }}
                         </div>
                     </div>
