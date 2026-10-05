@@ -28,6 +28,15 @@ class FilaWardenServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Suppress benign WSL / multi-user permission warnings on compiled Blade views
+        set_error_handler(function (int $errno, string $errstr): bool {
+            if (str_contains($errstr, 'touch(): Utime failed')) {
+                return true;
+            }
+
+            return false;
+        }, E_WARNING);
+
         $this->loadViewsFrom(
             __DIR__ . '/../resources/views',
             'filawarden'
