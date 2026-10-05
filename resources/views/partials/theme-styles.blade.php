@@ -114,6 +114,7 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
     .sm\:p-5 { padding: 1.25rem; }
     .sm\:text-sm { font-size: 0.875rem; line-height: 1.25rem; }
     .sm\:gap-8 { gap: 2rem; }
+    .sm\:flex-nowrap { flex-wrap: nowrap !important; }
 }
 @media (min-width: 768px) {
     .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -123,11 +124,29 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
     .md\:hidden { display: none !important; }
     .md\:grid { display: grid !important; }
     .md\:flex { display: flex !important; }
+    .md\:flex-row { flex-direction: row !important; }
+    .md\:items-center { align-items: center !important; }
+    .md\:table-cell { display: table-cell !important; }
+    .md\:w-auto { width: auto !important; }
 }
 @media (min-width: 1024px) {
     .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* Positioning & Dimensions */
+.absolute { position: absolute !important; }
+.relative { position: relative !important; }
+.top-0 { top: 0 !important; }
+.left-0 { left: 0 !important; }
+.w-1 { width: 0.25rem !important; }
+.w-3 { width: 0.75rem !important; }
+.h-3 { height: 0.75rem !important; }
+.w-48 { width: 12rem !important; }
+.h-48 { height: 12rem !important; }
+.h-full { height: 100% !important; }
+.w-fit { width: fit-content !important; }
+.items-baseline { align-items: baseline !important; }
 
 /* Backgrounds & borders */
 .bg-white { background-color: #ffffff; }
@@ -148,10 +167,18 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
 .bg-red-500 { background-color: #ef4444; }
 .bg-red-600 { background-color: #dc2626; }
 .bg-blue-50 { background-color: #eff6ff; }
+.bg-indigo-50 { background-color: #eef2ff !important; }
+.bg-indigo-600 { background-color: #4f46e5 !important; }
+.text-indigo-600 { color: #4f46e5 !important; }
+.text-indigo-700 { color: #4338ca !important; }
+.hover\:bg-indigo-100:hover { background-color: #e0e7ff !important; }
+.hover\:text-indigo-700:hover { color: #4338ca !important; }
+.hover\:text-slate-900:hover { color: #0f172a !important; }
 .border { border-width: 1px; border-style: solid; }
 .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
 .border-t { border-top-width: 1px; border-top-style: solid; }
 .border-l-4 { border-left-width: 4px; border-left-style: solid; }
+.border-transparent { border-color: transparent !important; }
 .border-slate-100 { border-color: #f1f5f9; }
 .border-slate-200 { border-color: #e2e8f0; }
 .border-slate-300 { border-color: #cbd5e1; }
@@ -165,6 +192,7 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
 .rounded-xl { border-radius: 0.75rem; }
 .rounded-full { border-radius: 9999px; }
 .shadow-sm { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); }
+.shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important; }
 
 /* Typography & Contrast Utilities */
 .text-white { color: #ffffff !important; }
@@ -232,6 +260,8 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
 .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
 .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
 .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem !important; line-height: 2.25rem !important; }
+.text-4xl { font-size: 2.25rem !important; line-height: 2.5rem !important; }
 .uppercase { text-transform: uppercase; }
 .tracking-wider { letter-spacing: 0.05em; }
 .tracking-tight { letter-spacing: -0.025em; }
@@ -250,6 +280,7 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
 .p-3\.5 { padding: 0.875rem; }
 .p-4 { padding: 1rem; }
 .p-5 { padding: 1.25rem; }
+.p-6 { padding: 1.5rem !important; }
 .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
 .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
 .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
@@ -281,6 +312,8 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
 .mb-2 { margin-bottom: 0.5rem; }
 .mb-3 { margin-bottom: 0.75rem; }
 .mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem !important; }
+.mb-8 { margin-bottom: 2rem !important; }
 .mb-12 { margin-bottom: 3rem; }
 
 .w-full { width: 100%; }
