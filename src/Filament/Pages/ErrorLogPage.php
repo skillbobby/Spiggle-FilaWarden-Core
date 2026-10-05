@@ -24,6 +24,9 @@ class ErrorLogPage extends Page
     public array $logData = [];
     public ?array $inspectedEntry = null;
 
+    public int $page = 1;
+    public int $perPage = 10;
+
     public function mount(ErrorLogReaderService $service): void
     {
         $this->refreshLogs();
@@ -49,7 +52,46 @@ class ErrorLogPage extends Page
     {
         /** @var ErrorLogReaderService $service */
         $service = app(ErrorLogReaderService::class);
-        $this->logData = $service->getLogEntries(50);
+        $this->logData = $service->getLogEntries(100);
+        $this->page = max(1, min($this->page, $this->getTotalPages()));
+    }
+
+    public function setPage(int $page): void
+    {
+        $this->page = max(1, min($page, $this->getTotalPages()));
+    }
+
+    public function nextPage(): void
+    {
+        if ($this->page < $this->getTotalPages()) {
+            $this->page++;
+        }
+    }
+
+    public function previousPage(): void
+    {
+        if ($this->page > 1) {
+            $this->page--;
+        }
+    }
+
+    public function updatedPerPage(): void
+    {
+        $this->page = 1;
+    }
+
+    public function getTotalPages(): int
+    {
+        $total = count($this->logData['entries'] ?? []);
+        return max(1, (int) ceil($total / $this->perPage));
+    }
+
+    public function getPaginatedEntries(): array
+    {
+        $entries = $this->logData['entries'] ?? [];
+        $offset = ($this->page - 1) * $this->perPage;
+
+        return array_slice($entries, $offset, $this->perPage, true);
     }
 
     public function inspectLogEntry(int $index): void
@@ -66,6 +108,7 @@ class ErrorLogPage extends Page
         $service = app(ErrorLogReaderService::class);
         $service->clearLog();
 
+        $this->page = 1;
         $this->refreshLogs();
 
         Notification::make()

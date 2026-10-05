@@ -313,6 +313,22 @@ svg.w-8, svg.h-8 { width: 2rem !important; height: 2rem !important; flex-shrink:
 table { width: 100%; border-collapse: collapse; }
 .divide-y > :not([hidden]) ~ :not([hidden]) { border-top-width: 1px; border-top-style: solid; border-top-color: #f1f5f9; }
 
+/* Form inputs & Pagination */
+select {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    outline: none;
+}
+button:disabled, button[disabled] {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+}
+.shadow-amber-500\/20 {
+    box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2), 0 2px 4px -2px rgba(245, 158, 11, 0.2);
+}
+
 /* Dark mode adjustments */
 .dark .bg-white { background-color: #111827 !important; }
 .dark .bg-slate-50 { background-color: rgba(31, 41, 55, 0.4) !important; }

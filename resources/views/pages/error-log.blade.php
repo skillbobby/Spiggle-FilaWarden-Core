@@ -88,9 +88,17 @@
                     <p class="text-sm mt-1">No errors or exceptions found in the primary log file buffer.</p>
                 </div>
             @else
+                @php
+                    $paginatedEntries = $this->getPaginatedEntries();
+                    $totalEntries = count($logData['entries'] ?? []);
+                    $totalPages = $this->getTotalPages();
+                    $from = $totalEntries > 0 ? (($page - 1) * $perPage) + 1 : 0;
+                    $to = min($page * $perPage, $totalEntries);
+                @endphp
+
                 <!-- Mobile Card List View (md:hidden) -->
                 <div class="space-y-3 md:hidden">
-                    @foreach($logData['entries'] as $index => $entry)
+                    @foreach($paginatedEntries as $index => $entry)
                         @php
                             $level = strtoupper($entry['level']);
                             $isCrit = in_array($level, ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR']);
@@ -137,7 +145,7 @@
                 </div>
 
                 <!-- Desktop Table View (hidden md:block) -->
-                <div class="hidden md:block bg-white dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-sm overflow-hidden mb-12">
+                <div class="hidden md:block bg-white dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm whitespace-nowrap">
                             <thead class="bg-slate-50 dark:bg-gray-800/60 border-b border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 font-semibold text-xs uppercase tracking-wider">
@@ -150,7 +158,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 dark:divide-white/5 text-slate-700 dark:text-gray-300">
-                                @foreach($logData['entries'] as $index => $entry)
+                                @foreach($paginatedEntries as $index => $entry)
                                     @php
                                         $level = strtoupper($entry['level']);
                                         $isCrit = in_array($level, ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR']);
@@ -196,6 +204,70 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Pagination Bar -->
+                @if($totalEntries > 0)
+                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl p-3.5 sm:p-4 shadow-sm mb-12">
+                        <!-- Results Count & Per Page Selector -->
+                        <div class="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto text-xs sm:text-sm text-slate-600 dark:text-gray-300">
+                            <div>
+                                Showing <strong class="font-semibold text-slate-900 dark:text-white">{{ $from }}</strong> to <strong class="font-semibold text-slate-900 dark:text-white">{{ $to }}</strong> of <strong class="font-semibold text-slate-900 dark:text-white">{{ $totalEntries }}</strong> records
+                            </div>
+                            <div class="flex items-center gap-1.5 ml-auto sm:ml-4">
+                                <span class="text-xs text-slate-500 dark:text-gray-400 hidden sm:inline">Per page:</span>
+                                <select
+                                    wire:model.live="perPage"
+                                    class="text-xs rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gray-800 text-slate-700 dark:text-gray-200 py-1 px-2.5 focus:ring-amber-500 focus:border-amber-500"
+                                >
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Page Navigation -->
+                        @if($totalPages > 1)
+                            <div class="flex items-center gap-1.5 w-full sm:w-auto justify-center sm:justify-end">
+                                <button
+                                    wire:click="previousPage"
+                                    type="button"
+                                    @disabled($page <= 1)
+                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                                    title="Previous Page"
+                                >
+                                    <x-heroicon-m-chevron-left class="w-4 h-4" />
+                                    <span class="hidden sm:inline">Prev</span>
+                                </button>
+
+                                <!-- Page Number Buttons -->
+                                <div class="flex items-center gap-1">
+                                    @for($p = max(1, $page - 2); $p <= min($totalPages, $page + 2); $p++)
+                                        <button
+                                            wire:click="setPage({{ $p }})"
+                                            type="button"
+                                            class="w-8 h-8 rounded-lg text-xs font-semibold flex items-center justify-center transition-colors shadow-sm {{ $p === $page ? 'bg-amber-500 text-white shadow-amber-500/20' : 'bg-white dark:bg-gray-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-gray-700' }}"
+                                        >
+                                            {{ $p }}
+                                        </button>
+                                    @endfor
+                                </div>
+
+                                <button
+                                    wire:click="nextPage"
+                                    type="button"
+                                    @disabled($page >= $totalPages)
+                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                                    title="Next Page"
+                                >
+                                    <span class="hidden sm:inline">Next</span>
+                                    <x-heroicon-m-chevron-right class="w-4 h-4" />
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                @endif
             @endif
         </div>
 
