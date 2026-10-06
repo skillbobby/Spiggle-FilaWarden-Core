@@ -243,9 +243,7 @@
                             <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
                                 Exception Stack Trace
                             </h4>
-                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-80 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
-                                {{ $inspectedJob['exception'] }}
-                            </div>
+                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-80 whitespace-pre-wrap break-all border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">{{ trim($inspectedJob['exception'] ?? 'No exception details available.') }}</div>
                         </div>
 
                         <!-- Serialized Payload -->
@@ -253,22 +251,20 @@
                             <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
                                 Job Payload
                             </h4>
-                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #cbd5e1 !important; border-color: #1e293b !important;">
-                                @php
-                                    $payloadRaw = $inspectedJob['payload'] ?? '';
-                                    if (is_array($payloadRaw)) {
-                                        $payloadFormatted = json_encode($payloadRaw, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-                                    } elseif (is_string($payloadRaw)) {
-                                        $decoded = json_decode($payloadRaw, true);
-                                        $payloadFormatted = (json_last_error() === JSON_ERROR_NONE && $decoded !== null)
-                                            ? json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-                                            : $payloadRaw;
-                                    } else {
-                                        $payloadFormatted = (string) $payloadRaw;
-                                    }
-                                @endphp
-                                {{ $payloadFormatted }}
-                            </div>
+                            @php
+                                $payloadRaw = $inspectedJob['payload'] ?? '';
+                                if (is_array($payloadRaw)) {
+                                    $payloadFormatted = json_encode($payloadRaw, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+                                } elseif (is_string($payloadRaw)) {
+                                    $decoded = json_decode($payloadRaw, true);
+                                    $payloadFormatted = (json_last_error() === JSON_ERROR_NONE && $decoded !== null)
+                                        ? json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+                                        : $payloadRaw;
+                                } else {
+                                    $payloadFormatted = (string) $payloadRaw;
+                                }
+                            @endphp
+                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 whitespace-pre-wrap break-all border border-slate-800" style="background-color: #020617 !important; color: #cbd5e1 !important; border-color: #1e293b !important;">{{ trim($payloadFormatted) }}</div>
                         </div>
 
                         <!-- Action Bar -->
