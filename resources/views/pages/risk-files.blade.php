@@ -117,6 +117,7 @@
 
                             <div class="pt-2 border-t border-slate-100 dark:border-white/5 flex justify-end">
                                 <button
+                                    x-on:click="$dispatch('open-modal', { id: 'inspect-risk-modal' })"
                                     wire:click="inspectRisk({{ $index }})"
                                     type="button"
                                     class="w-full sm:w-auto inline-flex justify-center items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -172,6 +173,7 @@
                                         </td>
                                         <td class="px-6 py-3.5 text-right whitespace-nowrap">
                                             <button
+                                                x-on:click="$dispatch('open-modal', { id: 'inspect-risk-modal' })"
                                                 wire:click="inspectRisk({{ $index }})"
                                                 type="button"
                                                 class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -198,64 +200,73 @@
                 Risk severity rationale and immediate removal runbook
             </x-slot>
 
-            @if($inspectedRisk)
-                <div class="space-y-6 text-sm">
-                    <!-- Hazard Header -->
-                    <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400">
-                                Hazard Type: {{ $inspectedRisk['type'] }}
-                            </span>
-                            @if($inspectedRisk['severity'] === 'critical')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20">
-                                    CRITICAL
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
-                                    HIGH
-                                </span>
-                            @endif
-                        </div>
-                        <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white break-all">
-                            {{ $inspectedRisk['file'] }}
-                        </h3>
-                        <p class="text-xs text-slate-600 dark:text-gray-300">
-                            {{ $inspectedRisk['reason'] ?? $inspectedRisk['message'] ?? 'Hazardous file detected in application hierarchy.' }}
-                        </p>
-                    </div>
+            <!-- Shimmer Skeleton Loader (Active while Livewire processes inspection) -->
+            <div wire:loading wire:target="inspectRisk" class="w-full">
+                @include('filawarden::partials.skeleton-loader')
+            </div>
 
-                    <!-- Path & File Footprint -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
-                            <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">File Size</span>
-                            <span class="font-mono text-xs font-bold text-slate-900 dark:text-white">
-                                {{ $inspectedRisk['size'] }}
-                            </span>
+            <div wire:loading.remove wire:target="inspectRisk">
+                @if($inspectedRisk)
+                    <div class="space-y-6 text-sm">
+                        <!-- Hazard Header -->
+                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400">
+                                    Hazard Type: {{ $inspectedRisk['type'] }}
+                                </span>
+                                @if($inspectedRisk['severity'] === 'critical')
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20">
+                                        CRITICAL
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
+                                        HIGH
+                                    </span>
+                                @endif
+                            </div>
+                            <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white break-all">
+                                {{ $inspectedRisk['file'] }}
+                            </h3>
+                            <p class="text-xs text-slate-600 dark:text-gray-300">
+                                {{ $inspectedRisk['reason'] ?? $inspectedRisk['message'] ?? 'Hazardous file detected in application hierarchy.' }}
+                            </p>
                         </div>
-                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
-                            <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Relative Path</span>
-                            <span class="font-mono text-xs font-bold text-slate-900 dark:text-white break-all">
-                                {{ $inspectedRisk['path'] }}
-                            </span>
-                        </div>
-                    </div>
 
-                    <!-- Remediation Runbook -->
-                    <div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 shadow-sm">
-                        <div class="flex items-center justify-between mb-2">
-                            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 flex items-center gap-1.5">
-                                <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
-                                Remediation Command
-                            </h5>
-                            <span class="text-[10px] font-mono text-slate-400 dark:text-gray-500 uppercase">CLI Runbook</span>
+                        <!-- Path & File Footprint -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
+                                <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">File Size</span>
+                                <span class="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                                    {{ $inspectedRisk['size'] }}
+                                </span>
+                            </div>
+                            <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
+                                <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Relative Path</span>
+                                <span class="font-mono text-xs font-bold text-slate-900 dark:text-white break-all">
+                                    {{ $inspectedRisk['path'] }}
+                                </span>
+                            </div>
                         </div>
-                        <div class="rounded-lg bg-slate-950 p-3.5 border border-slate-800 font-mono text-xs select-all whitespace-pre-wrap leading-relaxed flex items-start gap-2.5 shadow-inner" style="background-color: #020617 !important; border-color: #1e293b !important;">
-                            <span class="text-emerald-500 select-none font-bold shrink-0" style="color: #10b981 !important;">$</span>
-                            <span class="text-emerald-300 font-semibold break-all" style="color: #6ee7b7 !important;">{{ $inspectedRisk['remediation'] ?? ('rm ' . escapeshellarg($inspectedRisk['path'] ?? $inspectedRisk['file'] ?? 'target_file')) }}</span>
+
+                        <!-- Remediation Runbook -->
+                        <div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 flex items-center gap-1.5">
+                                    <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
+                                    Remediation Command
+                                </h5>
+                                <span class="text-[10px] font-mono text-slate-400 dark:text-gray-500 uppercase">CLI Runbook</span>
+                            </div>
+                            <div class="rounded-lg bg-slate-950 p-3.5 border border-slate-800 font-mono text-xs select-all whitespace-pre-wrap leading-relaxed flex items-start gap-2.5 shadow-inner" style="background-color: #020617 !important; border-color: #1e293b !important;">
+                                <span class="text-emerald-500 select-none font-bold shrink-0" style="color: #10b981 !important;">$</span>
+                                <span class="text-emerald-300 font-semibold break-all" style="color: #6ee7b7 !important;">{{ $inspectedRisk['remediation'] ?? ('rm ' . escapeshellarg($inspectedRisk['path'] ?? $inspectedRisk['file'] ?? 'target_file')) }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @else
+                    @include('filawarden::partials.skeleton-loader')
+                @endif
+            </div>
         </x-filament::modal>
     </div>
 </x-filament-panels::page>

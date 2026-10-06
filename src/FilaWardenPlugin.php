@@ -94,7 +94,7 @@ class FilaWardenPlugin implements Plugin
                 fn () => view('filawarden::partials.theme-styles')
             )
             ->renderHook(
-                \Filament\View\PanelsRenderHook::PAGE_END,
+                \Filament\View\PanelsRenderHook::BODY_END,
                 fn () => view('filawarden::partials.loading-overlay')
             );
     }

@@ -34,6 +34,10 @@ class DeploymentAuditorPage extends Page
         if (request()->has('inspect')) {
             $this->inspectCheck(request()->query('inspect'));
         }
+
+        if (request()->has('skeleton')) {
+            $this->dispatch('open-modal', id: 'inspect-check-modal');
+        }
     }
 
     public function inspectCheck(string $id): void

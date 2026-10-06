@@ -595,6 +595,123 @@ body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) .
     background-color: rgba(15 23 42 / 0.65) !important;
     backdrop-filter: blur(4px) !important;
 }
+
+/* ==========================================================================
+   FilaWarden Shimmer Skeleton Loader System
+   ========================================================================== */
+@keyframes fw-skeleton-blink {
+    0%, 100% { opacity: 0.95; }
+    50% { opacity: 0.35; }
+}
+@keyframes fw-skeleton-sweep {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.fw-skeleton {
+    background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+    background-size: 200% 100%;
+    animation: fw-skeleton-sweep 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite, fw-skeleton-blink 1.25s ease-in-out infinite;
+}
+.dark .fw-skeleton {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    background-size: 200% 100%;
+}
+.fw-skeleton-code {
+    background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
+    background-size: 200% 100%;
+    animation: fw-skeleton-sweep 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite, fw-skeleton-blink 1.25s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   FilaWarden Page Grey-Out & Blinking Shimmer Overlay
+   ========================================================================== */
+@keyframes fw-page-blink {
+    0%, 100% {
+        opacity: 0.92;
+        backdrop-filter: grayscale(85%) contrast(85%) blur(1px);
+        -webkit-backdrop-filter: grayscale(85%) contrast(85%) blur(1px);
+    }
+    50% {
+        opacity: 0.35;
+        backdrop-filter: grayscale(65%) contrast(90%) blur(0.5px);
+        -webkit-backdrop-filter: grayscale(65%) contrast(90%) blur(0.5px);
+    }
+}
+@keyframes fw-shimmer-sweep {
+    0% { transform: translateX(-150%) skewX(-20deg); }
+    100% { transform: translateX(150%) skewX(-20deg); }
+}
+@keyframes fw-top-progress {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(25%); }
+    100% { transform: translateX(100%); }
+}
+.fw-page-shimmer-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+    cursor: wait !important;
+    overflow: hidden !important;
+    background: rgba(15, 23, 42, 0.45) !important;
+    animation: fw-page-blink 1.25s ease-in-out infinite !important;
+}
+.fw-shimmer-sweep-beam {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.08) 42%, rgba(245, 158, 11, 0.22) 50%, rgba(255, 255, 255, 0.08) 58%, transparent 80%) !important;
+    animation: fw-shimmer-sweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+    pointer-events: none !important;
+}
+.fw-top-progress-bar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    background: rgba(245, 158, 11, 0.18) !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    z-index: 100001 !important;
+}
+.fw-top-progress-indicator {
+    height: 100% !important;
+    width: 38% !important;
+    background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b) !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.95) !important;
+    animation: fw-top-progress 1.3s ease-in-out infinite !important;
+}
+.fw-telemetry-pill {
+    position: fixed !important;
+    bottom: 1.25rem !important;
+    right: 1.25rem !important;
+    z-index: 100000 !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.625rem !important;
+    padding: 0.5rem 0.875rem !important;
+    border-radius: 9999px !important;
+    background-color: rgba(15, 23, 42, 0.92) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.30) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.025em !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
 </style>
 
 <script>

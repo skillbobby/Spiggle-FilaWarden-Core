@@ -104,6 +104,7 @@
 
                             <div class="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-end gap-2">
                                 <button
+                                    x-on:click="$dispatch('open-modal', { id: 'inspect-job-modal' })"
                                     wire:click="inspectJob('{{ $job['uuid'] ?? $job['id'] }}')"
                                     type="button"
                                     class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-gray-200 bg-slate-100 dark:bg-gray-800 border border-slate-200 dark:border-white/10 hover:bg-slate-200"
@@ -166,6 +167,7 @@
                                         <td class="px-6 py-4 text-right whitespace-nowrap">
                                             <div class="flex items-center justify-end gap-2">
                                                 <button
+                                                    x-on:click="$dispatch('open-modal', { id: 'inspect-job-modal' })"
                                                     wire:click="inspectJob('{{ $job['uuid'] ?? $job['id'] }}')"
                                                     type="button"
                                                     class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 hover:text-slate-900 bg-slate-100 dark:bg-gray-800 border border-slate-200 dark:border-white/10 transition-colors"
@@ -210,78 +212,87 @@
                 Inspecting worker execution failure
             </x-slot>
 
-            @if($inspectedJob)
-                <div class="space-y-6 text-sm">
-                    <!-- Job Header Card -->
-                    <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-200">
-                                {{ $inspectedJob['queue'] }}
-                            </span>
-                            <span class="text-xs text-slate-500 dark:text-gray-400">
-                                Connection: <strong>{{ $inspectedJob['connection'] }}</strong>
-                            </span>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono break-all">
-                            {{ $inspectedJob['name'] }}
-                        </h3>
-                        <div class="text-xs text-slate-500 dark:text-gray-400">
-                            Failed at: {{ $inspectedJob['failed_at'] }}
-                        </div>
-                    </div>
+            <!-- Shimmer Skeleton Loader (Active while Livewire processes inspection) -->
+            <div wire:loading wire:target="inspectJob" class="w-full">
+                @include('filawarden::partials.skeleton-loader')
+            </div>
 
-                    <!-- Exception Trace -->
-                    <div>
-                        <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
-                            Exception Stack Trace
-                        </h4>
-                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-80 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
-                            {{ $inspectedJob['exception'] }}
+            <div wire:loading.remove wire:target="inspectJob">
+                @if($inspectedJob)
+                    <div class="space-y-6 text-sm">
+                        <!-- Job Header Card -->
+                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-200">
+                                    {{ $inspectedJob['queue'] }}
+                                </span>
+                                <span class="text-xs text-slate-500 dark:text-gray-400">
+                                    Connection: <strong>{{ $inspectedJob['connection'] }}</strong>
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono break-all">
+                                {{ $inspectedJob['name'] }}
+                            </h3>
+                            <div class="text-xs text-slate-500 dark:text-gray-400">
+                                Failed at: {{ $inspectedJob['failed_at'] }}
+                            </div>
+                        </div>
+
+                        <!-- Exception Trace -->
+                        <div>
+                            <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
+                                Exception Stack Trace
+                            </h4>
+                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-80 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
+                                {{ $inspectedJob['exception'] }}
+                            </div>
+                        </div>
+
+                        <!-- Serialized Payload -->
+                        <div>
+                            <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
+                                Job Payload
+                            </h4>
+                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #cbd5e1 !important; border-color: #1e293b !important;">
+                                @php
+                                    $payloadRaw = $inspectedJob['payload'] ?? '';
+                                    if (is_array($payloadRaw)) {
+                                        $payloadFormatted = json_encode($payloadRaw, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+                                    } elseif (is_string($payloadRaw)) {
+                                        $decoded = json_decode($payloadRaw, true);
+                                        $payloadFormatted = (json_last_error() === JSON_ERROR_NONE && $decoded !== null)
+                                            ? json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+                                            : $payloadRaw;
+                                    } else {
+                                        $payloadFormatted = (string) $payloadRaw;
+                                    }
+                                @endphp
+                                {{ $payloadFormatted }}
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="pt-4 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-end gap-3">
+                            <button
+                                wire:click="retryJob('{{ $inspectedJob['uuid'] ?? $inspectedJob['id'] }}')"
+                                type="button"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
+                            >
+                                <x-heroicon-m-arrow-path class="w-4 h-4" /> Retry Job Now
+                            </button>
+                            <button
+                                wire:click="forgetJob('{{ $inspectedJob['uuid'] ?? $inspectedJob['id'] }}')"
+                                type="button"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
+                            >
+                                <x-heroicon-m-trash class="w-4 h-4" /> Delete Record
+                            </button>
                         </div>
                     </div>
-
-                    <!-- Serialized Payload -->
-                    <div>
-                        <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
-                            Job Payload
-                        </h4>
-                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-slate-300 overflow-x-auto max-h-60 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #cbd5e1 !important; border-color: #1e293b !important;">
-                            @php
-                                $payloadRaw = $inspectedJob['payload'] ?? '';
-                                if (is_array($payloadRaw)) {
-                                    $payloadFormatted = json_encode($payloadRaw, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-                                } elseif (is_string($payloadRaw)) {
-                                    $decoded = json_decode($payloadRaw, true);
-                                    $payloadFormatted = (json_last_error() === JSON_ERROR_NONE && $decoded !== null)
-                                        ? json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-                                        : $payloadRaw;
-                                } else {
-                                    $payloadFormatted = (string) $payloadRaw;
-                                }
-                            @endphp
-                            {{ $payloadFormatted }}
-                        </div>
-                    </div>
-
-                    <!-- Action Bar -->
-                    <div class="pt-4 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-end gap-3">
-                        <button
-                            wire:click="retryJob('{{ $inspectedJob['uuid'] ?? $inspectedJob['id'] }}')"
-                            type="button"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
-                        >
-                            <x-heroicon-m-arrow-path class="w-4 h-4" /> Retry Job Now
-                        </button>
-                        <button
-                            wire:click="forgetJob('{{ $inspectedJob['uuid'] ?? $inspectedJob['id'] }}')"
-                            type="button"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
-                        >
-                            <x-heroicon-m-trash class="w-4 h-4" /> Delete Record
-                        </button>
-                    </div>
-                </div>
-            @endif
+                @else
+                    @include('filawarden::partials.skeleton-loader')
+                @endif
+            </div>
         </x-filament::modal>
     </div>
 </x-filament-panels::page>

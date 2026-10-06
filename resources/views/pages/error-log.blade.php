@@ -133,6 +133,7 @@
                                     {{ $entry['channel'] }}
                                 </span>
                                 <button
+                                    x-on:click="$dispatch('open-modal', { id: 'inspect-error-modal' })"
                                     wire:click="inspectLogEntry({{ $index }})"
                                     type="button"
                                     class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -191,6 +192,7 @@
                                         </td>
                                         <td class="px-6 py-3.5 text-right whitespace-nowrap">
                                             <button
+                                                x-on:click="$dispatch('open-modal', { id: 'inspect-error-modal' })"
                                                 wire:click="inspectLogEntry({{ $index }})"
                                                 type="button"
                                                 class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -281,34 +283,43 @@
                 Raw exception stack trace and application context
             </x-slot>
 
-            @if($inspectedEntry)
-                <div class="space-y-6 text-sm">
-                    <!-- Entry Header Card -->
-                    <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400">
-                                Channel: {{ $inspectedEntry['channel'] }}
-                            </span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold {{ in_array(strtoupper($inspectedEntry['level']), ['EMERGENCY','ALERT','CRITICAL','ERROR']) ? 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400' : 'bg-amber-50 text-amber-700' }}">
-                                {{ $inspectedEntry['level'] }}
-                            </span>
-                        </div>
-                        <div class="font-mono text-xs text-slate-500 dark:text-gray-400">
-                            Logged at: {{ $inspectedEntry['timestamp'] }}
-                        </div>
-                    </div>
+            <!-- Shimmer Skeleton Loader (Active while Livewire processes inspection) -->
+            <div wire:loading wire:target="inspectLogEntry" class="w-full">
+                @include('filawarden::partials.skeleton-loader')
+            </div>
 
-                    <!-- Exception Trace / Payload -->
-                    <div>
-                        <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
-                            Log Entry Body
-                        </h4>
-                        <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-96 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
-                            {{ $inspectedEntry['full'] ?? $inspectedEntry['message'] ?? 'No trace details recorded.' }}
+            <div wire:loading.remove wire:target="inspectLogEntry">
+                @if($inspectedEntry)
+                    <div class="space-y-6 text-sm">
+                        <!-- Entry Header Card -->
+                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400">
+                                    Channel: {{ $inspectedEntry['channel'] }}
+                                </span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold {{ in_array(strtoupper($inspectedEntry['level']), ['EMERGENCY','ALERT','CRITICAL','ERROR']) ? 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400' : 'bg-amber-50 text-amber-700' }}">
+                                    {{ $inspectedEntry['level'] }}
+                                </span>
+                            </div>
+                            <div class="font-mono text-xs text-slate-500 dark:text-gray-400">
+                                Logged at: {{ $inspectedEntry['timestamp'] }}
+                            </div>
+                        </div>
+
+                        <!-- Exception Trace / Payload -->
+                        <div>
+                            <h4 class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider mb-2">
+                                Log Entry Body
+                            </h4>
+                            <div class="rounded-lg bg-slate-950 p-4 font-mono text-xs text-red-300 overflow-x-auto max-h-96 whitespace-pre-wrap border border-slate-800" style="background-color: #020617 !important; color: #fca5a5 !important; border-color: #1e293b !important;">
+                                {{ $inspectedEntry['full'] ?? $inspectedEntry['message'] ?? 'No trace details recorded.' }}
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @else
+                    @include('filawarden::partials.skeleton-loader')
+                @endif
+            </div>
         </x-filament::modal>
     </div>
 </x-filament-panels::page>

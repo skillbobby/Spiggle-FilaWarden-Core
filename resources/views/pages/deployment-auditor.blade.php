@@ -81,6 +81,7 @@
 
                         <div class="pt-2 border-t border-slate-100 dark:border-white/5">
                             <button
+                                x-on:click="$dispatch('open-modal', { id: 'inspect-check-modal' })"
                                 wire:click="inspectCheck('{{ $check['id'] }}')"
                                 type="button"
                                 class="w-full inline-flex justify-center items-center gap-1.5 px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -120,6 +121,7 @@
 
                         <div class="mt-auto pt-2">
                             <button
+                                x-on:click="$dispatch('open-modal', { id: 'inspect-check-modal' })"
                                 wire:click="inspectCheck('{{ $check['id'] }}')"
                                 type="button"
                                 class="w-full inline-flex justify-center items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -176,6 +178,7 @@
                                 </td>
                                 <td class="px-6 py-3.5 text-right">
                                     <button
+                                        x-on:click="$dispatch('open-modal', { id: 'inspect-check-modal' })"
                                         wire:click="inspectCheck('{{ $check['id'] }}')"
                                         type="button"
                                         class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
@@ -200,62 +203,71 @@
                 Evaluation criteria and remediation procedure
             </x-slot>
 
-            @if($inspectedCheck)
-                <div class="space-y-6 text-sm">
-                    <!-- Check Header -->
-                    <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider">
-                                Category: {{ $inspectedCheck['category'] }}
-                            </span>
-                            @if($inspectedCheck['status'] === 'passed')
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">PASSED</span>
-                            @elseif($inspectedCheck['status'] === 'warning')
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">WARNING</span>
-                            @else
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20">FAILED</span>
-                            @endif
-                        </div>
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white">
-                            {{ $inspectedCheck['name'] }}
-                        </h3>
-                        <p class="text-xs text-slate-600 dark:text-gray-300">
-                            {{ $inspectedCheck['message'] }}
-                        </p>
-                    </div>
+            <!-- Shimmer Skeleton Loader (Active while Livewire processes inspection) -->
+            <div wire:loading wire:target="inspectCheck" class="w-full">
+                @include('filawarden::partials.skeleton-loader')
+            </div>
 
-                    <!-- State vs Recommended -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
-                            <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Current State</span>
-                            <span class="font-mono text-xs font-bold text-slate-900 dark:text-white">
-                                {{ $inspectedCheck['current'] }}
-                            </span>
+            <div wire:loading.remove wire:target="inspectCheck">
+                @if($inspectedCheck)
+                    <div class="space-y-6 text-sm">
+                        <!-- Check Header -->
+                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs uppercase font-bold text-slate-500 dark:text-gray-400 tracking-wider">
+                                    Category: {{ $inspectedCheck['category'] }}
+                                </span>
+                                @if($inspectedCheck['status'] === 'passed')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">PASSED</span>
+                                @elseif($inspectedCheck['status'] === 'warning')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">WARNING</span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20">FAILED</span>
+                                @endif
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white">
+                                {{ $inspectedCheck['name'] }}
+                            </h3>
+                            <p class="text-xs text-slate-600 dark:text-gray-300">
+                                {{ $inspectedCheck['message'] }}
+                            </p>
                         </div>
-                        <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
-                            <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Recommended Benchmark</span>
-                            <span class="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                                {{ $inspectedCheck['recommended'] }}
-                            </span>
-                        </div>
-                    </div>
 
-                    <!-- Remediation Runbook -->
-                    <div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 shadow-sm">
-                        <div class="flex items-center justify-between mb-2">
-                            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 flex items-center gap-1.5">
-                                <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
-                                Remediation Command / Action
-                            </h5>
-                            <span class="text-[10px] font-mono text-slate-400 dark:text-gray-500 uppercase">CLI Runbook</span>
+                        <!-- State vs Recommended -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
+                                <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Current State</span>
+                                <span class="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                                    {{ $inspectedCheck['current'] }}
+                                </span>
+                            </div>
+                            <div class="rounded-xl bg-slate-50 dark:bg-gray-800/60 p-4 border border-slate-200 dark:border-white/10">
+                                <span class="block text-xs uppercase font-semibold text-slate-500 dark:text-gray-400 mb-1">Recommended Benchmark</span>
+                                <span class="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                                    {{ $inspectedCheck['recommended'] }}
+                                </span>
+                            </div>
                         </div>
-                        <div class="rounded-lg bg-slate-950 p-3.5 border border-slate-800 font-mono text-xs select-all whitespace-pre-wrap leading-relaxed flex items-start gap-2.5 shadow-inner" style="background-color: #020617 !important; border-color: #1e293b !important;">
-                            <span class="text-emerald-500 select-none font-bold shrink-0" style="color: #10b981 !important;">$</span>
-                            <span class="text-emerald-300 font-semibold break-all" style="color: #6ee7b7 !important;">{{ $inspectedCheck['remediation'] }}</span>
+
+                        <!-- Remediation Runbook -->
+                        <div class="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-gray-200 flex items-center gap-1.5">
+                                    <x-heroicon-m-wrench-screwdriver class="w-4 h-4 text-amber-500" />
+                                    Remediation Command / Action
+                                </h5>
+                                <span class="text-[10px] font-mono text-slate-400 dark:text-gray-500 uppercase">CLI Runbook</span>
+                            </div>
+                            <div class="rounded-lg bg-slate-950 p-3.5 border border-slate-800 font-mono text-xs select-all whitespace-pre-wrap leading-relaxed flex items-start gap-2.5 shadow-inner" style="background-color: #020617 !important; border-color: #1e293b !important;">
+                                <span class="text-emerald-500 select-none font-bold shrink-0" style="color: #10b981 !important;">$</span>
+                                <span class="text-emerald-300 font-semibold break-all" style="color: #6ee7b7 !important;">{{ $inspectedCheck['remediation'] }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @else
+                    @include('filawarden::partials.skeleton-loader')
+                @endif
+            </div>
         </x-filament::modal>
     </div>
 </x-filament-panels::page>
