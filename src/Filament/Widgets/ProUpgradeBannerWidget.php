@@ -12,6 +12,11 @@ class ProUpgradeBannerWidget extends Widget
 
     protected int|string|array $columnSpan = 'full';
 
+    public static function canView(): bool
+    {
+        return ! class_exists(\Spiggle\FilaWardenAdvanced\FilaWardenAdvancedPlugin::class);
+    }
+
     public function getViewData(): array
     {
         return [

@@ -1,3 +1,4 @@
+@once('filawarden-loading-overlay')
 <!-- Unified Operations Shimmer Overlay (Responsive to SPA Navigation & Livewire Actions) -->
 <div
     x-data="{
@@ -83,3 +84,4 @@
         <span>Syncing FilaWarden...</span>
     </div>
 </div>
+@endonce

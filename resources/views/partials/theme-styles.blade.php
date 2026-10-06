@@ -1,3 +1,4 @@
+@once('filawarden-theme-styles')
 <style>
 /* ==========================================================================
    FilaWarden Operations Intelligence Theme System
@@ -738,3 +739,4 @@ body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) .
         window.addEventListener('popstate', applyFilaWardenSidebarState);
     })();
 </script>
+@endonce
