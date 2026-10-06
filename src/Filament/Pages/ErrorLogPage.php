@@ -32,6 +32,10 @@ class ErrorLogPage extends Page
     public function mount(ErrorLogReaderService $service): void
     {
         $this->refreshLogs();
+
+        if (request()->has('inspect')) {
+            $this->inspectLogEntry((int) request()->query('inspect'));
+        }
     }
 
     public function getTitle(): string

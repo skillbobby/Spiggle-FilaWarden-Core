@@ -29,6 +29,10 @@ class QueueMonitorPage extends Page
     public function mount(QueueMonitorService $service): void
     {
         $this->refreshMetrics();
+
+        if (request()->has('inspect')) {
+            $this->inspectJob(request()->query('inspect'));
+        }
     }
 
     public function getTitle(): string

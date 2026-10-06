@@ -29,6 +29,10 @@ class RiskFilesPage extends Page
     public function mount(RiskFileScannerService $scanner): void
     {
         $this->runScan();
+
+        if (request()->has('inspect')) {
+            $this->inspectRisk((int) request()->query('inspect'));
+        }
     }
 
     public function inspectRisk(int $index): void
