@@ -376,4 +376,248 @@ button:disabled, button[disabled] {
 .dark .text-slate-600 { color: #d1d5db !important; }
 .dark .text-slate-500 { color: #9ca3af !important; }
 .dark .hover\:bg-slate-50:hover { background-color: rgba(255, 255, 255, 0.03) !important; }
+
+/* ==========================================================================
+   FilaWarden Dark Operations Sidebar (Active in Basic & Pro)
+   Sidebar background becomes: rgb(15 23 42 / var(--tw-bg-opacity, 1))
+   ========================================================================== */
+
+/* 1. Main Sidebar Surface & Shell */
+html.filawarden-active #fi-main-sidebar,
+body.filawarden-active #fi-main-sidebar,
+html.filawarden-active .fi-sidebar,
+body.filawarden-active .fi-sidebar,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]),
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) .fi-sidebar,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) .fi-sidebar,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) .fi-sidebar,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) .fi-sidebar {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1)) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 4px 0 24px -4px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 2. Sidebar Header & Logo */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-header,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-header,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-header,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-header,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-header,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-header,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-header {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1)) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: none !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-logo,
+body.filawarden-active #fi-main-sidebar .fi-logo,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-logo,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-logo,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-logo,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-logo,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-logo {
+    color: #f8fafc !important;
+    font-weight: 700 !important;
+}
+
+/* 3. Navigation Container & Scrollbar */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-nav,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-nav,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-nav,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-nav,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-nav,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-nav,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-nav {
+    background-color: transparent !important;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* 4. Group Labels (Operations Intelligence) */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-group-label,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-group-label,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-group-label,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-label,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-label,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-label,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-label {
+    color: #94a3b8 !important; /* slate-400 */
+    font-size: 0.6875rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    font-weight: 700 !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-sidebar-group-collapse-btn svg,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-group-collapse-btn svg,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-group-collapse-btn svg,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-collapse-btn svg,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-collapse-btn svg,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-collapse-btn svg,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-group-collapse-btn svg {
+    color: #64748b !important;
+}
+
+/* 5. Inactive Items: High Contrast Typography & Icons */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label {
+    color: #cbd5e1 !important; /* slate-300 */
+    font-weight: 500 !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > svg,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn > .fi-icon {
+    color: #94a3b8 !important; /* slate-400 */
+}
+
+/* 6. Inactive Items Hover State */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover .fi-sidebar-item-label {
+    color: #ffffff !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > svg,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover > .fi-icon {
+    color: #fbbf24 !important; /* amber-400 */
+}
+
+/* 7. Active Item: Amber Glowing Command Accents */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.24) 0%, rgba(245, 158, 11, 0.08) 100%) !important;
+    border: 1px solid rgba(245, 158, 11, 0.38) !important;
+    box-shadow: 0 0 16px -2px rgba(245, 158, 11, 0.25) !important;
+    border-radius: 0.5rem !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item.fi-active .fi-sidebar-item-label,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label {
+    color: #fbbf24 !important; /* amber-400 */
+    font-weight: 700 !important;
+}
+
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+html.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > svg,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: #f59e0b !important; /* amber-500 */
+}
+
+/* 8. Footer & Sub-navigation */
+html.filawarden-active #fi-main-sidebar .fi-sidebar-footer,
+body.filawarden-active #fi-main-sidebar .fi-sidebar-footer,
+#fi-main-sidebar:has(.fi-sidebar-item.fi-active a[href*="filawarden"]) .fi-sidebar-footer,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-footer,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-footer,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-footer,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) #fi-main-sidebar .fi-sidebar-footer {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1)) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html.filawarden-active .fi-sidebar-close-overlay,
+body.filawarden-active .fi-sidebar-close-overlay,
+html:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) .fi-sidebar-close-overlay,
+body:has(#fi-main-content [wire\:name*="FilaWarden\\Filament\\Pages"]) .fi-sidebar-close-overlay,
+html:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) .fi-sidebar-close-overlay,
+body:has(#fi-main-content [wire\:name*="FilaWardenAdvanced\\Filament\\Pages"]) .fi-sidebar-close-overlay {
+    background-color: rgba(15 23 42 / 0.65) !important;
+    backdrop-filter: blur(4px) !important;
+}
 </style>
+
+<script>
+    (function () {
+        function applyFilaWardenSidebarState() {
+            var isFw = window.location.pathname.indexOf('/filawarden') !== -1;
+            if (isFw) {
+                document.documentElement.classList.add('filawarden-active');
+                if (document.body) {
+                    document.body.classList.add('filawarden-active');
+                }
+            } else {
+                document.documentElement.classList.remove('filawarden-active');
+                if (document.body) {
+                    document.body.classList.remove('filawarden-active');
+                }
+            }
+        }
+        applyFilaWardenSidebarState();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyFilaWardenSidebarState);
+        }
+        document.addEventListener('livewire:navigated', applyFilaWardenSidebarState);
+        window.addEventListener('popstate', applyFilaWardenSidebarState);
+    })();
+</script>
