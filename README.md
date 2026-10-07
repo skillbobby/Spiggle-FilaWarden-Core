@@ -46,7 +46,7 @@ FilaWarden is a native operations intelligence suite built specifically for Lara
 
 ## 🚀 Pro Edition: FilaWarden Advanced
 
-Looking for automated threat scanning, APM slow query tracing, and automated incident triage? Upgrade to **[FilaWarden Pro on Polar.sh](https://polar.sh/SkillBobby-Labs)** or **[Lemon Squeezy](https://spiggle.lemonsqueezy.com/buy/filawarden-pro-single)**.
+Looking for automated threat scanning, APM slow query tracing, and automated incident triage? Upgrade to **[FilaWarden Advanced (Pro Edition)](https://filawarden.com)**.
 
 * 🛡️ **Security Intelligence Center**: Automated regex scanning for leaked Stripe/AWS API keys, exposed `.env` files, and HTTP security headers (CSP, HSTS).
 * ⚡ **APM & Slow Query Registry**: Percentile latency metrics (P50, P95, P99), throughput (RPM), and SQL statement logging with exact caller file traces.
@@ -54,7 +54,7 @@ Looking for automated threat scanning, APM slow query tracing, and automated inc
 * 🔔 **Multi-Channel Alert Dispatcher**: Automated alert broadcasting to Slack, Discord, and custom Webhooks.
 * 🤖 **Autonomous AI Remediation**: One-click diagnosis and execution of cache compilations and performance routines.
 
-👉 **[Purchase Pro on Polar.sh](https://polar.sh/SkillBobby-Labs)** | **[Purchase on Lemon Squeezy](https://spiggle.lemonsqueezy.com/buy/filawarden-pro-single)** | **[View Interactive Showcase](docs/index.html)**
+👉 **[Purchase Pro on Lemon Squeezy](https://kodesmart.lemonsqueezy.com/checkout/buy/de7602d0-9edf-486f-b947-883bbf5ce584?enabled=2219342)** | **[Official Website](https://filawarden.com)**
 
 ---
 
@@ -167,4 +167,4 @@ If you discover a security vulnerability within FilaWarden, please review our [S
 
 ## 📄 License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information. Commercial Pro features require a valid license key or access grant from [Polar.sh](https://polar.sh/SkillBobby-Labs) or [Lemon Squeezy](https://spiggle.lemonsqueezy.com).
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information. Commercial Pro features require a valid license key from [Lemon Squeezy](https://filawarden.com).
