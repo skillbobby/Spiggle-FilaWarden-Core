@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://packagist.org/packages/spiggle/filawarden-core"><img src="https://img.shields.io/packagist/v/spiggle/filawarden-core.svg?style=flat-square&color=10b981" alt="Latest Version on Packagist"></a>
-  <a href="https://github.com/spiggle/filawarden-core/actions"><img src="https://img.shields.io/badge/tests-passing-emerald.svg?style=flat-square" alt="Test Suite"></a>
+  <a href="https://github.com/skillbobby/Spiggle-FilaWarden-Core/actions"><img src="https://img.shields.io/github/actions/workflow/status/skillbobby/Spiggle-FilaWarden-Core/tests.yml?branch=main&label=tests&style=flat-square" alt="Test Suite"></a>
   <a href="https://php.net"><img src="https://img.shields.io/badge/php-8.2%20--%208.5-blue.svg?style=flat-square" alt="PHP Version"></a>
   <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-11%20%7C%2012%20%7C%2013-red.svg?style=flat-square" alt="Laravel Version"></a>
   <a href="https://filamentphp.com"><img src="https://img.shields.io/badge/filament-v4%20%7C%20v5-amber.svg?style=flat-square" alt="Filament Version"></a>
@@ -161,7 +161,7 @@ php artisan test --filter=FilaWardenPluginTest
 
 ## 🔒 Security & Reporting
 
-If you discover a security vulnerability within FilaWarden, please send an e-mail to security@spiggle.io instead of opening a public issue. All reports are investigated promptly.
+If you discover a security vulnerability within FilaWarden, please review our [Security Policy](SECURITY.md) and send an e-mail to **skillbobby@outlook.com**. All reports are investigated promptly.
 
 ---
 

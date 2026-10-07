@@ -3,26 +3,44 @@
     "description": "Laravel Operations Intelligence Platform for Filament - Core Edition",
     "type": "library",
     "license": "MIT",
+    "homepage": "https://skillbobby.github.io/spiggle/Spiggle-FilaWarden-Core/",
+    "support": {
+        "issues": "https://github.com/skillbobby/Spiggle-FilaWarden-Core/issues",
+        "source": "https://github.com/skillbobby/Spiggle-FilaWarden-Core"
+    },
+    "keywords": [
+        "spiggle",
+        "laravel",
+        "filament",
+        "filament-plugin",
+        "filament-v4",
+        "filament-v5",
+        "filawarden",
+        "monitoring",
+        "security",
+        "health"
+    ],
     "authors": [
         {
-            "name": "Spiggle Software",
-            "email": "support@spiggle.dev"
+            "name": "Spiggle",
+            "email": "skillbobby@outlook.com",
+            "role": "Developer"
         }
     ],
-    "version": "1.0.0",
     "require": {
-        "php": "^8.3",
+        "php": "^8.2",
         "ext-json": "*",
         "ext-pdo": "*",
-        "filament/filament": "^5.0",
-        "illuminate/support": "^12.0|^13.0",
-        "spatie/laravel-package-tools": "^1.16|^1.90",
+        "filament/filament": "^4.0 || ^5.0",
+        "illuminate/contracts": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/support": "^11.0 || ^12.0 || ^13.0",
+        "spatie/laravel-package-tools": "^1.16 || ^1.90",
         "dragonmantank/cron-expression": "^3.0",
-        "symfony/finder": "^7.0|^8.0"
+        "symfony/finder": "^7.0 || ^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0|^12.0",
-        "orchestra/testbench": "^9.0|^10.0"
+        "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +58,12 @@
                 "Spiggle\\FilaWarden\\FilaWardenServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
