@@ -6,8 +6,8 @@
       <stop offset="100%" stop-color="#03060c"/>
     </linearGradient>
     <radialGradient id="lglow1" cx="15%" cy="20%" r="60%">
-      <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#0062FF" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#0062FF" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="lglow2" cx="30%" cy="85%" r="55%">
       <stop offset="0%" stop-color="#f97316" stop-opacity="0.18"/>
@@ -60,10 +60,13 @@
 
   <!-- Top Bar -->
   <g transform="translate(75, 60)">
-    <!-- Official Commercial License Badge (Polar & Lemon Squeezy) -->
-    <rect width="470" height="42" rx="21" fill="#1e293b" fill-opacity="0.9" stroke="#f59e0b" stroke-opacity="0.4"/>
-    <circle cx="24" cy="21" r="5" fill="#f59e0b"/>
-    <text x="40" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" fill="#fbbf24" letter-spacing="1.2">OFFICIAL COMMERCIAL LICENSE · POLAR &amp; LEMON SQUEEZY</text>
+    <!-- Polar.sh Official Badge -->
+    <rect width="370" height="42" rx="21" fill="#0f172a" fill-opacity="0.95" stroke="#0062FF" stroke-opacity="0.6"/>
+    <!-- Polar Icon Vector scaled to 22x22 -->
+    <g transform="translate(18, 10) scale(0.073)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M66.4284 274.26C134.876 320.593 227.925 302.666 274.258 234.219C320.593 165.771 302.666 72.7222 234.218 26.3885C165.77 -19.9451 72.721 -2.0181 26.3873 66.4297C-19.9465 134.877 -2.01938 227.927 66.4284 274.26ZM47.9555 116.67C30.8375 169.263 36.5445 221.893 59.2454 256.373C18.0412 217.361 7.27564 150.307 36.9437 92.318C55.9152 55.2362 87.5665 29.3937 122.5 18.3483C90.5911 36.7105 62.5549 71.8144 47.9555 116.67ZM175.347 283.137C211.377 272.606 244.211 246.385 263.685 208.322C293.101 150.825 282.768 84.4172 242.427 45.2673C264.22 79.7626 269.473 131.542 252.631 183.287C237.615 229.421 208.385 265.239 175.347 283.137ZM183.627 266.229C207.945 245.418 228.016 210.604 236.936 168.79C251.033 102.693 232.551 41.1978 195.112 20.6768C214.97 47.3945 225.022 99.2902 218.824 157.333C214.085 201.724 200.814 240.593 183.627 266.229ZM63.7178 131.844C49.5155 198.43 68.377 260.345 106.374 280.405C85.9962 254.009 75.5969 201.514 81.8758 142.711C86.5375 99.0536 99.4504 60.737 116.225 35.0969C92.2678 55.983 72.5384 90.4892 63.7178 131.844ZM199.834 149.561C200.908 217.473 179.59 272.878 152.222 273.309C124.853 273.742 101.797 219.039 100.724 151.127C99.6511 83.2138 120.968 27.8094 148.337 27.377C175.705 26.9446 198.762 81.648 199.834 149.561Z" fill="#38bdf8"/>
+    </g>
+    <text x="48" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" fill="#38bdf8" letter-spacing="1.5">POLAR.SH OFFICIAL COMMERCIAL LICENSE</text>
 
     <!-- Supported Stacks Badge -->
     <g transform="translate(930, 0)">
@@ -86,8 +89,8 @@
       <circle cx="256" cy="168" r="24" fill="#ffffff"/>
     </g>
 
-    <!-- Main Title: strictly single space, crisp kerning -->
-    <text x="148" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="74" font-weight="900" fill="#ffffff" letter-spacing="-2">Fila<tspan fill="#f97316">Warden</tspan> <tspan fill="#fbbf24">Pro</tspan></text>
+    <!-- Main Title -->
+    <text x="148" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="74" font-weight="900" fill="#ffffff" letter-spacing="-2">Fila<tspan fill="#f97316">Warden</tspan> <tspan fill="#38bdf8">Pro</tspan></text>
 
     <!-- Headings -->
     <text x="0" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="800" fill="#f8fafc" letter-spacing="-0.4">Enterprise Operations Intelligence &amp; APM Sentinel</text>
@@ -100,7 +103,7 @@
       <text x="0" y="335">alerts directly inside your Filament admin panel.</text>
     </g>
 
-    <!-- Feature Badges Grid (Pills with ample room so words NEVER spill over) -->
+    <!-- Feature Badges Grid -->
     <g transform="translate(0, 385)">
       <!-- Secret Scanner -->
       <rect width="180" height="48" rx="14" fill="#0f172a" fill-opacity="0.9" stroke="#10b981" stroke-opacity="0.5"/>
@@ -110,7 +113,7 @@
       <rect x="195" width="205" height="48" rx="14" fill="#0f172a" fill-opacity="0.9" stroke="#f59e0b" stroke-opacity="0.5"/>
       <text x="215" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="700" fill="#fbbf24">⚡ APM Slow Queries</text>
 
-      <!-- TickitDex Alerts (Wide generous rect, words NEVER spill over) -->
+      <!-- TickitDex Alerts -->
       <rect x="415" width="205" height="48" rx="14" fill="#1e1b4b" fill-opacity="0.7" stroke="#818cf8" stroke-opacity="0.6"/>
       <text x="435" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="700" fill="#c7d2fe">🔔 TickitDex Alerts</text>
 
@@ -133,9 +136,9 @@
 
     <!-- Guarantee Badges -->
     <g transform="translate(0, 560)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#64748b">
-      <text x="0" y="0"><tspan fill="#10b981" font-weight="800">✓</tspan> Instant Composer License Key</text>
-      <text x="260" y="0"><tspan fill="#10b981" font-weight="800">✓</tspan> Lifetime Updates Included</text>
-      <text x="500" y="0"><tspan fill="#10b981" font-weight="800">✓</tspan> Commercial Use License</text>
+      <text x="0" y="0"><tspan fill="#10b981" font-weight="800">✓</tspan> Automated GitHub Benefit Access</text>
+      <text x="290" y="0"><tspan fill="#10b981" font-weight="800">✓</tspan> Lifetime Updates Included</text>
+      <text x="540" y="0"><tspan fill="#10b981" font-weight="800">✓</tspan> Commercial Use License</text>
     </g>
   </g>
 
