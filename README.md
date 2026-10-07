@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="art/filamentphp-plugin-cover.png" alt="FilaWarden Filament Plugin Cover" width="100%">
+  <img class="filament-hidden" src="art/filamentphp-plugin-cover.png" alt="FilaWarden Filament Plugin Cover" width="100%">
 </p>
 
 <p align="center">
