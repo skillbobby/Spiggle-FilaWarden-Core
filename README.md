@@ -149,6 +149,10 @@ php artisan test --filter=FilaWardenPluginTest
 
 Looking for automated secret scanning, APM slow query tracing, and multi-channel incident response? Explore **[FilaWarden Advanced](https://filawarden.com)**.
 
+
+## 📹 Demo Video
+**[Watch on YouTube](https://youtu.be/PGlXb3FDmb0?si=piTEYJX1w9OsXzgi)** - Laravel Monitoring Inside Filament: FilaWarden Full Tour (Free)
+
 ---
 
 ## 🔒 Security & Reporting
