@@ -5,17 +5,22 @@ namespace Spiggle\FilaWarden\Filament\Pages;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Carbon;
+use Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Services\QueueMonitorService;
 
 class QueueMonitorPage extends Page
 {
-    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+    use AuthorizesFilaWardenAccess;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
+    protected static ?string $cluster = FilaWardenCluster::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Queue Monitor';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-queue-list';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-queue-list';
 
     protected static ?string $slug = 'filawarden/queue-monitor';
 
@@ -24,6 +29,7 @@ class QueueMonitorPage extends Page
     protected string $view = 'filawarden::pages.queue-monitor';
 
     public array $metrics = [];
+
     public ?array $inspectedJob = null;
 
     public function mount(QueueMonitorService $service): void
@@ -47,8 +53,9 @@ class QueueMonitorPage extends Page
             return null;
         }
 
-        $time = \Illuminate\Support\Carbon::parse($at);
-        return 'Last polled: ' . $time->format('M j, Y H:i:s') . ' (' . $time->diffForHumans() . ')';
+        $time = Carbon::parse($at);
+
+        return 'Last polled: '.$time->format('M j, Y H:i:s').' ('.$time->diffForHumans().')';
     }
 
     public function refreshMetrics(): void

@@ -5,6 +5,8 @@ namespace Spiggle\FilaWarden\Filament\Pages;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Filament\Widgets\DeploymentStatusWidget;
 use Spiggle\FilaWarden\Filament\Widgets\HealthScoreOverviewWidget;
 use Spiggle\FilaWarden\Filament\Widgets\ProUpgradeBannerWidget;
@@ -12,13 +14,15 @@ use Spiggle\FilaWarden\Filament\Widgets\SystemResourcesGaugeWidget;
 
 class ExecutiveDashboardPage extends Page
 {
-    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+    use AuthorizesFilaWardenAccess;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
+    protected static ?string $cluster = FilaWardenCluster::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Executive Dashboard';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-pie';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-pie';
 
     protected static ?string $slug = 'filawarden/dashboard';
 
@@ -33,7 +37,7 @@ class ExecutiveDashboardPage extends Page
 
     public function getSubheading(): ?string
     {
-        return 'Last evaluated: ' . now()->format('M j, Y H:i:s') . ' (' . now()->diffForHumans() . ')';
+        return 'Last evaluated: '.now()->format('M j, Y H:i:s').' ('.now()->diffForHumans().')';
     }
 
     protected function getHeaderActions(): array

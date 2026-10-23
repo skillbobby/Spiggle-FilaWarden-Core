@@ -5,17 +5,22 @@ namespace Spiggle\FilaWarden\Filament\Pages;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Carbon;
+use Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Services\ErrorLogReaderService;
 
 class ErrorLogPage extends Page
 {
-    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+    use AuthorizesFilaWardenAccess;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
+    protected static ?string $cluster = FilaWardenCluster::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Error Log Reader';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-exclamation-triangle';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-exclamation-triangle';
 
     protected static ?string $slug = 'filawarden/error-logs';
 
@@ -24,9 +29,11 @@ class ErrorLogPage extends Page
     protected string $view = 'filawarden::pages.error-log';
 
     public array $logData = [];
+
     public ?array $inspectedEntry = null;
 
     public int $page = 1;
+
     public int $perPage = 10;
 
     public function mount(ErrorLogReaderService $service): void
@@ -50,8 +57,9 @@ class ErrorLogPage extends Page
             return null;
         }
 
-        $time = \Illuminate\Support\Carbon::parse($at);
-        return 'Last read: ' . $time->format('M j, Y H:i:s') . ' (' . $time->diffForHumans() . ')';
+        $time = Carbon::parse($at);
+
+        return 'Last read: '.$time->format('M j, Y H:i:s').' ('.$time->diffForHumans().')';
     }
 
     public function refreshLogs(): void
@@ -89,6 +97,7 @@ class ErrorLogPage extends Page
     public function getTotalPages(): int
     {
         $total = count($this->logData['entries'] ?? []);
+
         return max(1, (int) ceil($total / $this->perPage));
     }
 

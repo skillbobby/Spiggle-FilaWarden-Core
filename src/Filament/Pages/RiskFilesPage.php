@@ -5,17 +5,22 @@ namespace Spiggle\FilaWarden\Filament\Pages;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Carbon;
+use Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Services\RiskFileScannerService;
 
 class RiskFilesPage extends Page
 {
-    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+    use AuthorizesFilaWardenAccess;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
+    protected static ?string $cluster = FilaWardenCluster::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Risk File Scanner';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-magnifying-glass';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-magnifying-glass';
 
     protected static ?string $slug = 'filawarden/risk-files';
 
@@ -24,6 +29,7 @@ class RiskFilesPage extends Page
     protected string $view = 'filawarden::pages.risk-files';
 
     public array $scanResults = [];
+
     public ?array $inspectedRisk = null;
 
     public function mount(RiskFileScannerService $scanner): void
@@ -55,8 +61,9 @@ class RiskFilesPage extends Page
             return null;
         }
 
-        $time = \Illuminate\Support\Carbon::parse($at);
-        return 'Last scanned: ' . $time->format('M j, Y H:i:s') . ' (' . $time->diffForHumans() . ')';
+        $time = Carbon::parse($at);
+
+        return 'Last scanned: '.$time->format('M j, Y H:i:s').' ('.$time->diffForHumans().')';
     }
 
     public function runScan(): void

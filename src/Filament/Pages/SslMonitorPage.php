@@ -5,17 +5,22 @@ namespace Spiggle\FilaWarden\Filament\Pages;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Carbon;
+use Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Services\SslMonitorService;
 
 class SslMonitorPage extends Page
 {
-    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+    use AuthorizesFilaWardenAccess;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
+    protected static ?string $cluster = FilaWardenCluster::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'SSL / TLS Certificate';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-lock-closed';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-lock-closed';
 
     protected static ?string $slug = 'filawarden/ssl-monitor';
 
@@ -42,8 +47,9 @@ class SslMonitorPage extends Page
             return null;
         }
 
-        $time = \Illuminate\Support\Carbon::parse($at);
-        return 'Last inspected: ' . $time->format('M j, Y H:i:s') . ' (' . $time->diffForHumans() . ')';
+        $time = Carbon::parse($at);
+
+        return 'Last inspected: '.$time->format('M j, Y H:i:s').' ('.$time->diffForHumans().')';
     }
 
     public function inspectCertificate(): void

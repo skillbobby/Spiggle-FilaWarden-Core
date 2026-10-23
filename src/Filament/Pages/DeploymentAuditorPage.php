@@ -5,18 +5,23 @@ namespace Spiggle\FilaWarden\Filament\Pages;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
+use Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Services\DeploymentAuditorEngine;
 
 class DeploymentAuditorPage extends Page
 {
-    use \Spiggle\FilaWarden\Concerns\AuthorizesFilaWardenAccess;
+    use AuthorizesFilaWardenAccess;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Operations Intelligence';
+    protected static ?string $cluster = FilaWardenCluster::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations Intelligence';
 
     protected static ?string $navigationLabel = 'Deployment Auditor';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-check';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
     protected static ?string $slug = 'filawarden/deployment-auditor';
 
@@ -25,6 +30,7 @@ class DeploymentAuditorPage extends Page
     protected string $view = 'filawarden::pages.deployment-auditor';
 
     public array $auditData = [];
+
     public ?array $inspectedCheck = null;
 
     public function mount(DeploymentAuditorEngine $auditor): void
@@ -46,6 +52,7 @@ class DeploymentAuditorPage extends Page
             if ($check['id'] === $id) {
                 $this->inspectedCheck = $check;
                 $this->dispatch('open-modal', id: 'inspect-check-modal');
+
                 return;
             }
         }
@@ -63,8 +70,9 @@ class DeploymentAuditorPage extends Page
             return null;
         }
 
-        $time = \Illuminate\Support\Carbon::parse($at);
-        return 'Last audited: ' . $time->format('M j, Y H:i:s') . ' (' . $time->diffForHumans() . ')';
+        $time = Carbon::parse($at);
+
+        return 'Last audited: '.$time->format('M j, Y H:i:s').' ('.$time->diffForHumans().')';
     }
 
     public function runAudit(): void

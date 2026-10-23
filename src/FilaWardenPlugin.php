@@ -4,6 +4,8 @@ namespace Spiggle\FilaWarden;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\View\PanelsRenderHook;
+use Spiggle\FilaWarden\Filament\FilaWardenCluster;
 use Spiggle\FilaWarden\Filament\Pages\DatabaseHealthPage;
 use Spiggle\FilaWarden\Filament\Pages\DeploymentAuditorPage;
 use Spiggle\FilaWarden\Filament\Pages\ErrorLogPage;
@@ -21,13 +23,21 @@ use Spiggle\FilaWarden\Filament\Widgets\SystemResourcesGaugeWidget;
 class FilaWardenPlugin implements Plugin
 {
     protected bool $hasExecutiveDashboard = true;
+
     protected bool $hasDeploymentAuditor = true;
+
     protected bool $hasInfrastructureMonitor = true;
+
     protected bool $hasQueueMonitor = true;
+
     protected bool $hasSchedulerMonitor = true;
+
     protected bool $hasDatabaseHealth = true;
+
     protected bool $hasErrorLog = true;
+
     protected bool $hasSslMonitor = true;
+
     protected bool $hasRiskFiles = true;
 
     public static function make(): static
@@ -42,7 +52,9 @@ class FilaWardenPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $pages = [];
+        $pages = [
+            FilaWardenCluster::class,
+        ];
         $widgets = [
             HealthScoreOverviewWidget::class,
             SystemResourcesGaugeWidget::class,
@@ -90,11 +102,11 @@ class FilaWardenPlugin implements Plugin
             ->pages($pages)
             ->widgets($widgets)
             ->renderHook(
-                \Filament\View\PanelsRenderHook::HEAD_END,
+                PanelsRenderHook::HEAD_END,
                 fn () => view('filawarden::partials.theme-styles')
             )
             ->renderHook(
-                \Filament\View\PanelsRenderHook::BODY_END,
+                PanelsRenderHook::BODY_END,
                 fn () => view('filawarden::partials.loading-overlay')
             );
     }
@@ -107,54 +119,63 @@ class FilaWardenPlugin implements Plugin
     public function executiveDashboard(bool $condition = true): static
     {
         $this->hasExecutiveDashboard = $condition;
+
         return $this;
     }
 
     public function deploymentAuditor(bool $condition = true): static
     {
         $this->hasDeploymentAuditor = $condition;
+
         return $this;
     }
 
     public function infrastructureMonitor(bool $condition = true): static
     {
         $this->hasInfrastructureMonitor = $condition;
+
         return $this;
     }
 
     public function queueMonitor(bool $condition = true): static
     {
         $this->hasQueueMonitor = $condition;
+
         return $this;
     }
 
     public function schedulerMonitor(bool $condition = true): static
     {
         $this->hasSchedulerMonitor = $condition;
+
         return $this;
     }
 
     public function databaseHealth(bool $condition = true): static
     {
         $this->hasDatabaseHealth = $condition;
+
         return $this;
     }
 
     public function errorLog(bool $condition = true): static
     {
         $this->hasErrorLog = $condition;
+
         return $this;
     }
 
     public function sslMonitor(bool $condition = true): static
     {
         $this->hasSslMonitor = $condition;
+
         return $this;
     }
 
     public function riskFiles(bool $condition = true): static
     {
         $this->hasRiskFiles = $condition;
+
         return $this;
     }
 }
