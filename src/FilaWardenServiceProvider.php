@@ -2,12 +2,19 @@
 
 namespace Spiggle\FilaWarden;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+use Spiggle\FilaWarden\Commands\FilaWardenAdvisoriesCommand;
 use Spiggle\FilaWarden\Commands\FilaWardenAuditCommand;
 use Spiggle\FilaWarden\Commands\FilaWardenCollectCommand;
 use Spiggle\FilaWarden\Commands\FilaWardenHeartbeatCommand;
+use Spiggle\FilaWarden\Security\AdvisoryVersionMatcher;
+use Spiggle\FilaWarden\Security\GithubPhpAdvisoryClient;
+use Spiggle\FilaWarden\Security\InstalledSoftwareInventory;
+use Spiggle\FilaWarden\Security\PackagistAdvisoryClient;
+use Spiggle\FilaWarden\Security\VersionAdvisoryScanner;
 use Spiggle\FilaWarden\Services\DeploymentAuditorEngine;
 use Spiggle\FilaWarden\Services\HealthScoreEngine;
 use Spiggle\FilaWarden\Services\SystemResourceCollector;
@@ -17,13 +24,18 @@ class FilaWardenServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/filawarden.php',
+            __DIR__.'/../config/filawarden.php',
             'filawarden'
         );
 
         $this->app->singleton(SystemResourceCollector::class);
         $this->app->singleton(DeploymentAuditorEngine::class);
         $this->app->singleton(HealthScoreEngine::class);
+        $this->app->singleton(InstalledSoftwareInventory::class);
+        $this->app->singleton(AdvisoryVersionMatcher::class);
+        $this->app->singleton(GithubPhpAdvisoryClient::class);
+        $this->app->singleton(PackagistAdvisoryClient::class);
+        $this->app->singleton(VersionAdvisoryScanner::class);
     }
 
     public function boot(): void
@@ -38,7 +50,7 @@ class FilaWardenServiceProvider extends ServiceProvider
         }, E_WARNING);
 
         $this->loadViewsFrom(
-            __DIR__ . '/../resources/views',
+            __DIR__.'/../resources/views',
             'filawarden'
         );
 
@@ -53,16 +65,17 @@ class FilaWardenServiceProvider extends ServiceProvider
         });
 
         // Local asset streaming route for zero-CDN, 100% air-gap and CSP compliance
-        \Illuminate\Support\Facades\Route::get('/vendor/filawarden/phosphor/{file}', function (string $file) {
+        Route::get('/vendor/filawarden/phosphor/{file}', function (string $file) {
             $allowed = ['regular.css', 'fill.css', 'Phosphor.woff2', 'Phosphor-Fill.woff2'];
             if (! in_array($file, $allowed, true)) {
                 abort(404);
             }
-            $path = __DIR__ . '/../resources/dist/phosphor/' . $file;
+            $path = __DIR__.'/../resources/dist/phosphor/'.$file;
             if (! file_exists($path)) {
                 abort(404);
             }
             $mime = str_ends_with($file, '.css') ? 'text/css; charset=UTF-8' : 'font/woff2';
+
             return response()->file($path, [
                 'Content-Type' => $mime,
                 'Cache-Control' => 'public, max-age=31536000',
@@ -71,19 +84,20 @@ class FilaWardenServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/filawarden.php' => config_path('filawarden.php'),
+                __DIR__.'/../config/filawarden.php' => config_path('filawarden.php'),
             ], 'filawarden-config');
 
             $this->publishes([
-                __DIR__ . '/../resources/views' => resource_path('views/vendor/filawarden'),
+                __DIR__.'/../resources/views' => resource_path('views/vendor/filawarden'),
             ], 'filawarden-views');
 
             $this->publishes([
-                __DIR__ . '/../resources/dist' => public_path('vendor/filawarden'),
+                __DIR__.'/../resources/dist' => public_path('vendor/filawarden'),
             ], 'filawarden-assets');
 
             $this->commands([
                 FilaWardenAuditCommand::class,
+                FilaWardenAdvisoriesCommand::class,
                 FilaWardenCollectCommand::class,
                 FilaWardenHeartbeatCommand::class,
             ]);

@@ -51,6 +51,23 @@ return [
         'audit_ttl' => 60, // seconds
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Published vulnerability advisories
+    |--------------------------------------------------------------------------
+    | Installed PHP and Composer package versions are compared with the
+    | php/php-src GitHub security advisories and the Packagist advisory feed.
+    | Matches at or above minimum_severity are reported. Results are cached.
+    */
+    'advisories' => [
+        'enabled' => env('FILAWARDEN_ADVISORIES_ENABLED', true),
+        'cache_ttl' => (int) env('FILAWARDEN_ADVISORIES_CACHE_TTL', 21600),
+        'minimum_severity' => env('FILAWARDEN_ADVISORIES_MIN_SEVERITY', 'high'),
+        'timeout' => (int) env('FILAWARDEN_ADVISORIES_TIMEOUT', 8),
+        'github_php_advisories_url' => 'https://api.github.com/repos/php/php-src/security-advisories',
+        'packagist_advisories_url' => 'https://packagist.org/api/security-advisories/',
+    ],
+
     'max_scanned_files' => env('FILAWARDEN_MAX_SCANNED_FILES', 500),
 
     'log_path' => env('FILAWARDEN_LOG_PATH', null),

@@ -41,6 +41,7 @@ FilaWarden is a native operations intelligence suite built specifically for Lara
 | **Application Error Log Reader** | Low-memory tail parser for `storage/logs/laravel.log` with log-level badges and one-click log truncation. |
 | **SSL / TLS Certificate Sentinel** | Expiration countdown alerts, issuing CA verification, and cipher suite auditing. |
 | **Dangerous File Scanner** | Filesystem risk detector for stray `.sql` dumps, compressed archives (`.zip`, `.tar`), and executable shell scripts (`.sh`). |
+| **Published Advisory Monitor** | Compares the installed PHP version and production Composer packages with the php/php-src GitHub advisory list and the Packagist security-advisory feed. |
 
 ---
 
@@ -124,6 +125,14 @@ php artisan filawarden:audit
 
 # Format output as JSON for CI/CD pipelines:
 php artisan filawarden:audit --json
+```
+
+### Check Published Advisories
+```bash
+php artisan filawarden:advisories
+
+# Bypass the cache and print JSON:
+php artisan filawarden:advisories --fresh --json
 ```
 
 ### Collect Telemetry Snapshot
