@@ -170,6 +170,12 @@ If you discover a security vulnerability within FilaWarden, please review our [S
 
 ---
 
+## Sponsors
+
+If this package is useful, consider supporting development:
+
+[![GitHub Sponsors](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=%23EA4AAA)](https://github.com/sponsors/skillbobby)
+
 ## 📄 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
